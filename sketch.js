@@ -1,6 +1,5 @@
 let ship;
 
-
 class Spacecraft{
   constructor(){
     this.x1 = width/2;
@@ -9,12 +8,22 @@ class Spacecraft{
     this.y2 = height/2 + height/30;
     this.x3 = width/2 + width/95;
     this.y3 = height/2 + height/30;
+    this.heading = 0;
   }
 
   makeShip(){
-    noFill();
-    stroke(255);
-    triangle(this.x1, this.y1, this.x2, this.y2, this.x3, this.y3);
+    push();
+
+      translate(this.x1, this.y1);
+      angleMode(DEGREES);
+      rotate(this.heading);
+      noFill();
+      stroke(255);
+      triangle(0, 0, -width/95, height/30, width/95, height/30);
+    pop();
+    // noFill();
+    // stroke(255);
+    // triangle(this.x1, this.y1, this.x2, this.y2, this.x3, this.y3);
   }
 
   moveShip(){
@@ -27,6 +36,8 @@ class Spacecraft{
     this.y2 += shipyVel;
     this.y3 += shipyVel;
   }
+
+
 }
 
 function setup() {
@@ -37,10 +48,8 @@ function setup() {
 function draw() {
   background(100);
   ship.makeShip();
-  if(mouseIsPressed && mouseX >= 0 && mouseX >= width/2){
-    // angleMode(DEGREES);
-    // rotate(180);
-    // triangle(ship.x1, ship.y1, ship.x2, ship.y2, ship.x3, ship.y3);
-    ship.moveShip();
-  }
+  if(mouseIsPressed && mouseX >= 0 && mouseX <= width/2){
+    ship.heading -= 5;
+
+}
 }
