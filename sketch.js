@@ -22,6 +22,10 @@ class Spacecraft{
     this.x1 += shipxVel;
     this.x2 += shipxVel;
     this.x3 += shipxVel;
+    let shipyVel = height/500;
+    this.y1 += shipyVel;
+    this.y2 += shipyVel;
+    this.y3 += shipyVel;
   }
 }
 
@@ -33,5 +37,10 @@ function setup() {
 function draw() {
   background(100);
   ship.makeShip();
-  ship.moveShip();
+  if(mouseIsPressed && mouseX >= 0 && mouseX >= width/2){
+    // angleMode(DEGREES);
+    // rotate(180);
+    // triangle(ship.x1, ship.y1, ship.x2, ship.y2, ship.x3, ship.y3);
+    ship.moveShip();
+  }
 }
