@@ -1,4 +1,5 @@
 let ship;
+let moveForward;
 
 class Spacecraft{
   constructor(){
@@ -43,13 +44,25 @@ class Spacecraft{
 function setup() {
   createCanvas(windowWidth, windowHeight);
   ship = new Spacecraft();
+  moveForward = createButton('Forward');
+  moveForward.position(width/3.5, height/1.5);
+  moveForward.mousePressed(ship.moveShip);
 }
 
 function draw() {
   background(100);
   ship.makeShip();
-  if(mouseIsPressed && mouseX >= 0 && mouseX <= width/2){
+  if(mouseIsPressed && mouseX <= width/4){
     ship.heading -= 5;
+  }
+  if(keyCode === 65){
+    ship.heading -= 5;
+  }
 
-}
+  if(mouseIsPressed && mouseX >= width - width/4){
+    ship.heading += 5;
+  }
+  if(keyCode === 68){
+    ship.heading += 5;
+  }
 }
