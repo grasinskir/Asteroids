@@ -11,6 +11,9 @@ class Spacecraft{
     this.x3 = width/2 + width/95;
     this.y3 = height/2 + height/30;
     this.heading = 0;
+    this.yVelocity = width/500*cos(this.heading);
+    this.xVelocity = width/500*sin(this.heading);
+    this.acceleration = width/500;
   }
 
   makeShip(){
@@ -20,7 +23,7 @@ class Spacecraft{
       rotate(this.heading);
       noFill();
       stroke(255);
-      triangle(0, 0, -width/95, height/30, width/95, height/30);
+      triangle(0, 0, -width/110, height/25, width/110, height/25);
     pop();
   }
 
@@ -28,15 +31,20 @@ class Spacecraft{
     push();
       translate(this.x1, this.y1);
       angleMode(DEGREES);
+      rotate(this.heading);
       noFill();
       stroke(255);
-      triangle(0, 0, -width/95, height/30, width/95, height/30);
+      triangle(0, 0, -width/110, height/25, width/110, height/25);
       // let shipyVel = -height/500;
       // this.y1 += shipyVel;
       // this.y2 += shipyVel;
       // this.y3 += shipyVel;
       pop();
-      this.y1 -= height/500;
+      angleMode(DEGREES);
+      this.y1 -= this.yVelocity;
+      this.x1 += this.xVelocity;
+      this.yVelocity *= this.acceleration;
+      this.xVelocity *= this.acceleration;
   }
 
 
