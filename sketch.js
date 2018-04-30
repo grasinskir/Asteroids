@@ -2,6 +2,7 @@ let ship;
 let moveForward;
 
 
+
 class Spacecraft{
   constructor(){
     this.x1 = width/2;
@@ -10,10 +11,13 @@ class Spacecraft{
     this.y2 = height/2 + height/30;
     this.x3 = width/2 + width/95;
     this.y3 = height/2 + height/30;
+    // this.yVelocity = width/500*cos(this.heading);
+    // this.xVelocity = width/500*sin(this.heading);
     this.heading = 0;
-    this.yVelocity = width/500*cos(this.heading);
-    this.xVelocity = width/500*sin(this.heading);
-    this.acceleration = width/500;
+    this.yVelocity = 0;
+    this.xVelocity = 0;
+    // this.acceleration = width/5000;
+
   }
 
   makeShip(){
@@ -35,17 +39,22 @@ class Spacecraft{
       noFill();
       stroke(255);
       triangle(0, 0, -width/110, height/25, width/110, height/25);
-      // let shipyVel = -height/500;
-      // this.y1 += shipyVel;
-      // this.y2 += shipyVel;
-      // this.y3 += shipyVel;
       pop();
       angleMode(DEGREES);
+      this.yacceleration = width/5000*cos(this.heading);
+      this.xacceleration = width/5000*sin(this.heading);
+      // this.yVelocity = width/500*cos(this.heading);
+      // this.xVelocity = width/500*sin(this.heading);
       this.y1 -= this.yVelocity;
       this.x1 += this.xVelocity;
-      this.yVelocity *= this.acceleration;
-      this.xVelocity *= this.acceleration;
   }
+   // accelerateShip(){
+   //   // this.yacceleration = width/500*cos(this.heading);
+   //   // this.xacceleration = width/500*sin(this.heading);
+   //   this.yVelocity -= this.yacceleration;
+   //   this.xVelocity += this.xacceleration;
+   //
+   // }
 
 
 }
@@ -62,6 +71,7 @@ function draw() {
   // moveForward.mousePressed;
 
   ship.makeShip();
+  ship.moveShip();
   if(mouseIsPressed && mouseX <= width/4){
     ship.heading -= 5;
   }
@@ -76,13 +86,21 @@ function draw() {
     ship.heading += 5;
   }
   if(mouseIsPressed && mouseX >= width/4 && mouseX <= width-width/4){
-    ship.moveShip();
-  }
-}
 
-function forwardShip(){
-  let shipyVel = -height/500;
-  ship.y1 += shipyVel;
-  ship.y2 += shipyVel;
-  ship.y3 += shipyVel;
+    ship.yVelocity += ship.yacceleration;
+    ship.xVelocity += ship.xacceleration;
+    // ship.accelerateShip();
+    // let shipacceleration = width/50;
+    // ship.xVelocity += ship.acceleration;
+    // ship.yVelocity += ship.acceleration;
+
+  }
+  if(ship.yVelocity <= 0 && !mouseIsPressed){
+    ship.yVelocity += ship.yacceleration;
+    console.log(ship.yVelocity);
+    console.log(ship.yacceleration);
+  }
+  if(ship.xVelocity >= 0 && !mouseIsPressed){
+    ship.xVelocity -= ship.xacceleration;
+  }
 }
