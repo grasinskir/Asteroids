@@ -1,6 +1,6 @@
 let ship;
 let moveForward;
-
+let pizzas = [];
 
 
 class Spacecraft{
@@ -37,8 +37,8 @@ class Spacecraft{
       triangle(0, 0, -width/110, height/25, width/110, height/25);
       pop();
       angleMode(DEGREES);
-      this.yacceleration = width/5000*cos(this.heading);
-      this.xacceleration = width/5000*sin(this.heading);
+      this.yacceleration = width/10000*cos(this.heading);
+      this.xacceleration = width/10000*sin(this.heading);
       this.y1 -= this.yVelocity;
       this.x1 += this.xVelocity;
   }
@@ -46,9 +46,33 @@ class Spacecraft{
 
 }
 
+class Rock{
+  constructor(){
+    this.x = random(0, width);
+    this.y = random(0, height);
+    this.r = width/10;
+    this.xVelocity = random(-width/500, width/500);
+    this.yVelocity = random(-height/500, height/500);
+  }
+
+  makeRock(){
+    stroke(255);
+    noFill();
+    ellipse(this.x, this.y, this.r, this.r);
+  }
+
+  moveRock(){
+    this.x += this.xVelocity;
+    this.y += this.yVelocity;
+  }
+}
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   ship = new Spacecraft();
+  for(i = 0; i < 10; i++){
+  pizzas[i] = new Rock();
+}
 }
 
 function draw() {
@@ -59,6 +83,10 @@ function draw() {
 
   ship.makeShip();
   ship.moveShip();
+  for(i = 0; i < pizzas.length; i++){
+  pizzas[i].makeRock();
+  pizzas[i].moveRock();
+}
   if(mouseIsPressed && mouseX <= width/4){
     ship.heading -= 5;
   }
@@ -78,42 +106,68 @@ function draw() {
   }
 
   if(ship.yVelocity < 0 && !mouseIsPressed){
-    ship.yVelocity += ship.yacceleration;
+    ship.yVelocity += abs(ship.yacceleration);
 
-    ship.yVelocity = 0;
-    // if(ship.yVelocity < 0 && ship.yVelocity > ship.yacceleration && !mouseIsPressed){
-    //   ship.yVelocity = 0;
-    //   ship.yacceleration = 0;
-    // }
+    if(ship.yVelocity < 0 && ship.yVelocity > ship.yacceleration && !mouseIsPressed){
+      ship.yVelocity = 0;
+      ship.yacceleration2 = 0;
+      ship.xVelocity = 0;
+    }
   }
   if(ship.yVelocity > 0 && !mouseIsPressed){
 
-    ship.yVelocity -= ship.yacceleration;
+    ship.yVelocity -= abs(ship.yacceleration);
 
-    ship.yVelocity = 0;
-    // if(ship.yVelocity > 0 && ship.yVelocity < ship.yacceleration && !mouseIsPressed){
-    //   ship.yVelocity = 0;
-    //   ship.yacceleration = 0;
-    // }
+    if(ship.yVelocity > 0 && ship.yVelocity < ship.yacceleration && !mouseIsPressed){
+      ship.yVelocity = 0;
+      ship.yacceleration2 = 0;
+      ship.xVelocity = 0;
+    }
   }
   if(ship.xVelocity > 0 && !mouseIsPressed){
 
-    ship.xVelocity -= ship.xacceleration;
+    ship.xVelocity -= abs(ship.xacceleration);
 
-    ship.xVelocity = 0;
-    // if(ship.xVelocity > 0 && ship.xVelocity < ship.xacceleration && !mouseIsPressed){
-    //   ship.xVelocity = 0;
-    //   ship.xacceleration = 0;
-    // }
+    if(ship.xVelocity > 0 && ship.xVelocity < ship.xacceleration && !mouseIsPressed){
+      ship.xVelocity = 0;
+      ship.xacceleration2 = 0;
+      ship.yVelocity = 0;
+    }
   }
   if(ship.xVelocity < 0 && !mouseIsPressed){
 
-    ship.xVelocity += ship.xacceleration;
-    
-    ship.xVelocity = 0;
-    // if(ship.xVelocity < 0 && ship.xVelocity > ship.xacceleration && !mouseIsPressed){
-    //   ship.xVelocity = 0;
-    //   ship.xacceleration = 0;
-    // }
+    ship.xVelocity += abs(ship.xacceleration);
+
+    if(ship.xVelocity < 0 && ship.xVelocity > ship.xacceleration && !mouseIsPressed){
+      ship.xVelocity = 0;
+      ship.xacceleration2 = 0;
+      ship.yVelocity = 0;
+    }
+  }
+  if(ship.x1 < -height/30){
+    ship.x1 = width;
+  }
+  if(ship.x1 > width + height/30){
+    ship.x1 = 0;
+  }
+  if(ship.y1 < -height/30){
+    ship.y1 = height;
+  }
+  if(ship.y1 > height + height/30){
+    ship.y1 = 0;
+  }
+  for(i = 0; i < pizzas.length; i++){
+    if(pizzas[i].x < -width/10){
+      pizzas[i].x = width + width/10;
+    }
+    if(pizzas[i].x > width + width/10){
+      pizzas[i].x = -width/10;
+    }
+    if(pizzas[i].y < -width/10){
+      pizzas[i].y = height + width/10;
+    }
+    if(pizzas[i].y > height + width/10){
+      pizzas[i].y = -width/10;
+    }
   }
 }
