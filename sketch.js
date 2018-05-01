@@ -11,13 +11,9 @@ class Spacecraft{
     this.y2 = height/2 + height/30;
     this.x3 = width/2 + width/95;
     this.y3 = height/2 + height/30;
-    // this.yVelocity = width/500*cos(this.heading);
-    // this.xVelocity = width/500*sin(this.heading);
     this.heading = 0;
     this.yVelocity = 0;
     this.xVelocity = 0;
-    // this.acceleration = width/5000;
-
   }
 
   makeShip(){
@@ -43,18 +39,9 @@ class Spacecraft{
       angleMode(DEGREES);
       this.yacceleration = width/5000*cos(this.heading);
       this.xacceleration = width/5000*sin(this.heading);
-      // this.yVelocity = width/500*cos(this.heading);
-      // this.xVelocity = width/500*sin(this.heading);
       this.y1 -= this.yVelocity;
       this.x1 += this.xVelocity;
   }
-   // accelerateShip(){
-   //   // this.yacceleration = width/500*cos(this.heading);
-   //   // this.xacceleration = width/500*sin(this.heading);
-   //   this.yVelocity -= this.yacceleration;
-   //   this.xVelocity += this.xacceleration;
-   //
-   // }
 
 
 }
@@ -86,21 +73,47 @@ function draw() {
     ship.heading += 5;
   }
   if(mouseIsPressed && mouseX >= width/4 && mouseX <= width-width/4){
-
     ship.yVelocity += ship.yacceleration;
     ship.xVelocity += ship.xacceleration;
-    // ship.accelerateShip();
-    // let shipacceleration = width/50;
-    // ship.xVelocity += ship.acceleration;
-    // ship.yVelocity += ship.acceleration;
+  }
 
-  }
-  if(ship.yVelocity <= 0 && !mouseIsPressed){
+  if(ship.yVelocity < 0 && !mouseIsPressed){
     ship.yVelocity += ship.yacceleration;
-    console.log(ship.yVelocity);
-    console.log(ship.yacceleration);
+
+    ship.yVelocity = 0;
+    // if(ship.yVelocity < 0 && ship.yVelocity > ship.yacceleration && !mouseIsPressed){
+    //   ship.yVelocity = 0;
+    //   ship.yacceleration = 0;
+    // }
   }
-  if(ship.xVelocity >= 0 && !mouseIsPressed){
+  if(ship.yVelocity > 0 && !mouseIsPressed){
+
+    ship.yVelocity -= ship.yacceleration;
+
+    ship.yVelocity = 0;
+    // if(ship.yVelocity > 0 && ship.yVelocity < ship.yacceleration && !mouseIsPressed){
+    //   ship.yVelocity = 0;
+    //   ship.yacceleration = 0;
+    // }
+  }
+  if(ship.xVelocity > 0 && !mouseIsPressed){
+
     ship.xVelocity -= ship.xacceleration;
+
+    ship.xVelocity = 0;
+    // if(ship.xVelocity > 0 && ship.xVelocity < ship.xacceleration && !mouseIsPressed){
+    //   ship.xVelocity = 0;
+    //   ship.xacceleration = 0;
+    // }
+  }
+  if(ship.xVelocity < 0 && !mouseIsPressed){
+
+    ship.xVelocity += ship.xacceleration;
+    
+    ship.xVelocity = 0;
+    // if(ship.xVelocity < 0 && ship.xVelocity > ship.xacceleration && !mouseIsPressed){
+    //   ship.xVelocity = 0;
+    //   ship.xacceleration = 0;
+    // }
   }
 }
