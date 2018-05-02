@@ -2,7 +2,7 @@ let ship;
 let moveForward;
 let pizzas = [];
 let bullets = [];
-
+let shoot;
 
 class Spacecraft{
   constructor(){
@@ -15,7 +15,6 @@ class Spacecraft{
     this.heading = 0;
     this.yVelocity = 0;
     this.xVelocity = 0;
-    this.angles = [];
   }
 
   makeShip(){
@@ -43,7 +42,7 @@ class Spacecraft{
       this.xacceleration = width/10000*sin(this.heading);
       this.y1 -= this.yVelocity;
       this.x1 += this.xVelocity;
-      this.angles.push(this.heading);
+
   }
 
 
@@ -71,10 +70,12 @@ class Rock{
 }
 
 class Projectile{
-  constructor(){
-    this.x = ship.x1;
-    this.y = ship.y1;
+  constructor(xPos, yPos, angle){
+    this.x = xPos;
+    this.y = yPos;
     this.r = width/500;
+    this.xVelocity = width/900*sin(angle);
+    this.yVelocity = width/900*cos(angle);
   }
 
   makeBullet(){
@@ -84,10 +85,8 @@ class Projectile{
   }
 
   moveBullet(){
-    for(i = 0; i < ship.angles.length; i++){
-    this.x += width/250*sin(ship.angles[i]);
-    this.y -= width/250*cos(ship.angles[i]);
-  }
+    this.x += this.xVelocity;
+    this.y -= this.yVelocity;
   }
 }
 
@@ -101,10 +100,11 @@ function setup() {
 
 function draw() {
   background(100);
-  // moveForward = createButton('Forward');
-  // moveForward.position(width/3.5, height/1.5);
-  // moveForward.mousePressed;
-
+//   for(i = 0; i < bullets.length; i++){
+//   shoot = createButton('shoot');
+//   shoot.position(width/3.5, height/1.5);
+//   shoot.mousePressed(bullets[i].makeBullet);
+// }
   ship.makeShip();
   ship.moveShip();
   for(i = 0; i < pizzas.length; i++){
@@ -124,7 +124,7 @@ function draw() {
   if(keyCode === 68){
     ship.heading += 5;
   }
-  if(mouseIsPressed && mouseX >= width/4 && mouseX <= width-width/4){
+  if(mouseIsPressed && mouseX >= width/2 && mouseX <= width-width/4){
     ship.yVelocity += ship.yacceleration;
     ship.xVelocity += ship.xacceleration;
   }
@@ -194,17 +194,46 @@ function draw() {
       pizzas[i].y = -width/10;
     }
   }
+  for(j = 0; j < pizzas.length; j++){
   for(i = 0; i < bullets.length; i++){
     bullets[i].makeBullet();
     bullets[i].moveBullet();
+    if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
+      bullets.splice(i,1);
+    }
+    // if(pizzas[j].x - pizzas.r <= bullets[i].x &&
+    //    pizzas[j].x + pizzas.r >= bullets[i].x &&
+    //    pizzas[j].y - pizzas.r <= bullets[i].y &&
+    //    pizzas[j].y + pizzas.r >= bullets[i].y){
+    //
+    //      pizzas[j].x = pizzas.x;
+    //      pizzas[j].y = pizzas.y;
+    //      bullets.splice(i,1);
+    //    }
   }
+}
+  if(ship.xVelocity >= width/300){
+    ship.xVelocity = width/300;
+  }
+  if(ship.xVelocity <= -width/300){
+    ship.xVelocity = -width/300;
+  }
+  if(ship.yVelocity >= width/300){
+    ship.yVelocity = width/300;
+  }
+  if(ship.yVelocity <= -width/300){
+    ship.yVelocity = -width/300;
+  }
+
 }
 
 function mousePressed(){
-  bullets.push(new Projectile);
-  for(i = 0; i < bullets.length; i++){
+  if(mouseX >= width/4 && mouseX <= width/2){
+    bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
+    for(i = 0; i < bullets.length; i++){
 
-    bullets[i].makeBullet();
-    bullets[i].moveBullet();
+      bullets[i].makeBullet();
+      bullets[i].moveBullet();
+    }
   }
 }
