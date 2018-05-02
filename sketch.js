@@ -1,6 +1,7 @@
 let ship;
 let moveForward;
 let pizzas = [];
+let bullets = [];
 
 
 class Spacecraft{
@@ -14,6 +15,7 @@ class Spacecraft{
     this.heading = 0;
     this.yVelocity = 0;
     this.xVelocity = 0;
+    this.angles = [];
   }
 
   makeShip(){
@@ -41,6 +43,7 @@ class Spacecraft{
       this.xacceleration = width/10000*sin(this.heading);
       this.y1 -= this.yVelocity;
       this.x1 += this.xVelocity;
+      this.angles.push(this.heading);
   }
 
 
@@ -64,6 +67,27 @@ class Rock{
   moveRock(){
     this.x += this.xVelocity;
     this.y += this.yVelocity;
+  }
+}
+
+class Projectile{
+  constructor(){
+    this.x = ship.x1;
+    this.y = ship.y1;
+    this.r = width/500;
+  }
+
+  makeBullet(){
+    noFill();
+    stroke(255);
+    ellipse(this.x, this.y, this.r, this.r);
+  }
+
+  moveBullet(){
+    for(i = 0; i < ship.angles.length; i++){
+    this.x += width/250*sin(ship.angles[i]);
+    this.y -= width/250*cos(ship.angles[i]);
+  }
   }
 }
 
@@ -169,5 +193,18 @@ function draw() {
     if(pizzas[i].y > height + width/10){
       pizzas[i].y = -width/10;
     }
+  }
+  for(i = 0; i < bullets.length; i++){
+    bullets[i].makeBullet();
+    bullets[i].moveBullet();
+  }
+}
+
+function mousePressed(){
+  bullets.push(new Projectile);
+  for(i = 0; i < bullets.length; i++){
+
+    bullets[i].makeBullet();
+    bullets[i].moveBullet();
   }
 }
