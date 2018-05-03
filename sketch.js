@@ -3,6 +3,8 @@ let moveForward;
 let pizzas = [];
 let bullets = [];
 let shoot;
+let distance1;
+let littlepizzas = [];
 
 class Spacecraft{
   constructor(){
@@ -49,10 +51,10 @@ class Spacecraft{
 }
 
 class Rock{
-  constructor(){
-    this.x = random(0, width);
-    this.y = random(0, height);
-    this.r = width/10;
+  constructor(x, y, r){
+    this.x = x;
+    this.y = y;
+    this.r = r;
     this.xVelocity = random(-width/500, width/500);
     this.yVelocity = random(-height/500, height/500);
   }
@@ -67,6 +69,22 @@ class Rock{
     this.x += this.xVelocity;
     this.y += this.yVelocity;
   }
+
+  doubleRock(){
+    stroke(255);
+    noFill();
+    ellipse(this.x, this.y, this.r/2, this.r/2);
+    this.x += this.xVelocity;
+    this.y += this.yVelocity;
+  }
+
+  inversedoubleRock(){
+    stroke(255);
+    noFill();
+    ellipse(this.x, this.y, this.r/2, this.r/2);
+    this.x -= this.xVelocity;
+    this.y -= this.yVelocity;
+  }
 }
 
 class Projectile{
@@ -74,8 +92,8 @@ class Projectile{
     this.x = xPos;
     this.y = yPos;
     this.r = width/500;
-    this.xVelocity = width/900*sin(angle);
-    this.yVelocity = width/900*cos(angle);
+    this.xVelocity = width/100*sin(angle);
+    this.yVelocity = width/100*cos(angle);
   }
 
   makeBullet(){
@@ -94,7 +112,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   ship = new Spacecraft();
   for(i = 0; i < 10; i++){
-  pizzas[i] = new Rock();
+  pizzas[i] = new Rock(random(0, width), random(0, height), width/10);
 }
 }
 
@@ -107,9 +125,17 @@ function draw() {
 // }
   ship.makeShip();
   ship.moveShip();
+  for(let i = 0; i < bullets.length; i++){
+    bullets[i].makeBullet();
+    bullets[i].moveBullet();
+  }
   for(i = 0; i < pizzas.length; i++){
   pizzas[i].makeRock();
   pizzas[i].moveRock();
+}
+for(n = 0; n < littlepizzas.length; n++){
+  littlepizzas[n].doubleRock();
+  littlepizzas[n].inversedoubleRock();
 }
   if(mouseIsPressed && mouseX <= width/4){
     ship.heading -= 5;
@@ -196,20 +222,25 @@ function draw() {
   }
   for(j = 0; j < pizzas.length; j++){
   for(i = 0; i < bullets.length; i++){
-    bullets[i].makeBullet();
-    bullets[i].moveBullet();
-    if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
+    // if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
+    //   bullets.splice(i,1);
+    // }
+    distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
+    if(distance1 <= pizzas[j].r/2){
+      // pizzas[j].x = random(0, width);
+      // pizzas[j].y = random(0, height);
+      for(let m = 0; m < 2; m++){
+      littlepizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, width/20));
+    }
+      for(let n = 0; n < littlepizzas.length; n++){
+      // littlepizzas[j] = new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, width/20);
+      // littlepizzas[n] = new Rock(random(0, width), random(0, height), width/20);
+      littlepizzas[n].doubleRock();
+      littlepizzas[n].inversedoubleRock();
+    }
+    pizzas.splice(j,1);
       bullets.splice(i,1);
     }
-    // if(pizzas[j].x - pizzas.r <= bullets[i].x &&
-    //    pizzas[j].x + pizzas.r >= bullets[i].x &&
-    //    pizzas[j].y - pizzas.r <= bullets[i].y &&
-    //    pizzas[j].y + pizzas.r >= bullets[i].y){
-    //
-    //      pizzas[j].x = pizzas.x;
-    //      pizzas[j].y = pizzas.y;
-    //      bullets.splice(i,1);
-    //    }
   }
 }
   if(ship.xVelocity >= width/300){
