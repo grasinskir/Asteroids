@@ -111,12 +111,15 @@ class Projectile{
 function setup() {
   createCanvas(windowWidth, windowHeight);
   ship = new Spacecraft();
+  r = width/10;
   for(i = 0; i < 10; i++){
-  pizzas[i] = new Rock(random(0, width), random(0, height), width/10);
+  pizzas[i] = new Rock(random(0, width), random(0, height), r);
 }
 }
-
+let p = 0;
 function draw() {
+  let r = width/10;
+
   background(100);
 //   for(i = 0; i < bullets.length; i++){
 //   shoot = createButton('shoot');
@@ -129,14 +132,14 @@ function draw() {
     bullets[i].makeBullet();
     bullets[i].moveBullet();
   }
-  for(i = 0; i < pizzas.length; i++){
+  for(let i = 0; i < pizzas.length; i++){
   pizzas[i].makeRock();
   pizzas[i].moveRock();
 }
-for(n = 0; n < littlepizzas.length; n++){
-  littlepizzas[n].doubleRock();
-  littlepizzas[n].inversedoubleRock();
-}
+// for(let n = 0; n < pizzas.length; n++){
+//   pizzas[n].doubleRock();
+//   pizzas[n].inversedoubleRock();
+// }
   if(mouseIsPressed && mouseX <= width/4){
     ship.heading -= 5;
   }
@@ -226,21 +229,27 @@ for(n = 0; n < littlepizzas.length; n++){
     //   bullets.splice(i,1);
     // }
     distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
-    if(distance1 <= pizzas[j].r/2){
-      // pizzas[j].x = random(0, width);
-      // pizzas[j].y = random(0, height);
-      for(let m = 0; m < 2; m++){
-      littlepizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, width/20));
+    if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
+
+      // littlepizzas.push(new Rock(pizzas[j].x - width/45, pizzas[j].y - width/45, width/20));
+      pizzas[j].xVelocity *= -1;
+      pizzas[j].yVelocity *= -1;
+
+pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
+pizzas[j].r = pizzas[j].r/2;
+
+
+
+      bullets.splice(i,1);
+
+
     }
-      for(let n = 0; n < littlepizzas.length; n++){
-      // littlepizzas[j] = new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, width/20);
-      // littlepizzas[n] = new Rock(random(0, width), random(0, height), width/20);
-      littlepizzas[n].doubleRock();
-      littlepizzas[n].inversedoubleRock();
-    }
-    pizzas.splice(j,1);
+    if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
+      pizzas.splice(j,1);
       bullets.splice(i,1);
     }
+    let distance2 = dist(ship.x, ship.y, pizzas[j].x, pizzas[j].y);
+    // if(distance2 <= pizzas[j].r)
   }
 }
   if(ship.xVelocity >= width/300){
