@@ -3,8 +3,7 @@ let moveForward;
 let pizzas = [];
 let bullets = [];
 let shoot;
-let distance1;
-let littlepizzas = [];
+let end = false;
 
 class Spacecraft{
   constructor(){
@@ -121,6 +120,7 @@ function draw() {
   let r = width/10;
 
   background(100);
+  controlPanel();
 //   for(i = 0; i < bullets.length; i++){
 //   shoot = createButton('shoot');
 //   shoot.position(width/3.5, height/1.5);
@@ -224,11 +224,12 @@ function draw() {
     }
   }
   for(j = 0; j < pizzas.length; j++){
+
   for(i = 0; i < bullets.length; i++){
     // if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
     //   bullets.splice(i,1);
     // }
-    distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
+    let distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
     if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
 
       // littlepizzas.push(new Rock(pizzas[j].x - width/45, pizzas[j].y - width/45, width/20));
@@ -248,8 +249,13 @@ pizzas[j].r = pizzas[j].r/2;
       pizzas.splice(j,1);
       bullets.splice(i,1);
     }
-    let distance2 = dist(ship.x, ship.y, pizzas[j].x, pizzas[j].y);
-    // if(distance2 <= pizzas[j].r)
+
+  }
+  let distance2 = dist(pizzas[j].x, pizzas[j].y, ship.x1, ship.y1);
+  let distance3 = dist(pizzas[j].x, pizzas[j].y, ship.x1 - width/110, ship.y1 + height/25);
+  let distance4 = dist(pizzas[j].x, pizzas[j].y, ship.x1 + width/110, ship.y1 + height/25);
+  if(distance2 <= pizzas[j].r/2 || distance3 <= pizzas[j].r/2 || distance4 <= pizzas[j].r/2){
+    end = true;
   }
 }
   if(ship.xVelocity >= width/300){
@@ -264,6 +270,12 @@ pizzas[j].r = pizzas[j].r/2;
   if(ship.yVelocity <= -width/300){
     ship.yVelocity = -width/300;
   }
+  if(end){
+    background(100);
+    fill(255);
+    stroke(255);
+    text("Game Over", width/2, height/2);
+  }
 
 }
 
@@ -276,4 +288,10 @@ function mousePressed(){
       bullets[i].moveBullet();
     }
   }
+}
+
+function controlPanel(){
+  fill(0);
+  stroke(0);
+  rect(0, height - height/8, width, height/8);
 }
