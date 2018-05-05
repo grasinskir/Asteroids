@@ -4,6 +4,7 @@ let pizzas = [];
 let bullets = [];
 let shoot;
 let end = false;
+let control = true;
 
 class Spacecraft{
   constructor(){
@@ -120,7 +121,9 @@ function draw() {
   let r = width/10;
 
   background(100);
+  while(control){
   controlPanel();
+}
 //   for(i = 0; i < bullets.length; i++){
 //   shoot = createButton('shoot');
 //   shoot.position(width/3.5, height/1.5);
@@ -153,7 +156,7 @@ function draw() {
   if(keyCode === 68){
     ship.heading += 5;
   }
-  if(mouseIsPressed && mouseX >= width/2 && mouseX <= width-width/4){
+  if(mouseIsPressed && mouseX >= width/2 && mouseX <= width-width/4 && mouseY >= height - height/6){
     ship.yVelocity += ship.yacceleration;
     ship.xVelocity += ship.xacceleration;
   }
@@ -204,10 +207,14 @@ function draw() {
     ship.x1 = 0;
   }
   if(ship.y1 < -height/30){
-    ship.y1 = height;
+    controlPanel();
+    ship.y1 = height - height/6;
   }
-  if(ship.y1 > height + height/30){
+  if(ship.y1 > height - height/6){
+    controlPanel();
+    if(ship.y1 > height - height/6 + height/30){
     ship.y1 = 0;
+  }
   }
   for(i = 0; i < pizzas.length; i++){
     if(pizzas[i].x < -width/10){
@@ -223,41 +230,41 @@ function draw() {
       pizzas[i].y = -width/10;
     }
   }
-  for(j = 0; j < pizzas.length; j++){
-
-  for(i = 0; i < bullets.length; i++){
-    // if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
-    //   bullets.splice(i,1);
-    // }
-    let distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
-    if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
-
-      // littlepizzas.push(new Rock(pizzas[j].x - width/45, pizzas[j].y - width/45, width/20));
-      pizzas[j].xVelocity *= -1;
-      pizzas[j].yVelocity *= -1;
-
-pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
-pizzas[j].r = pizzas[j].r/2;
-
-
-
-      bullets.splice(i,1);
-
-
-    }
-    if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
-      pizzas.splice(j,1);
-      bullets.splice(i,1);
-    }
-
-  }
-  let distance2 = dist(pizzas[j].x, pizzas[j].y, ship.x1, ship.y1);
-  let distance3 = dist(pizzas[j].x, pizzas[j].y, ship.x1 - width/110, ship.y1 + height/25);
-  let distance4 = dist(pizzas[j].x, pizzas[j].y, ship.x1 + width/110, ship.y1 + height/25);
-  if(distance2 <= pizzas[j].r/2 || distance3 <= pizzas[j].r/2 || distance4 <= pizzas[j].r/2){
-    end = true;
-  }
-}
+//   for(j = 0; j < pizzas.length; j++){
+//
+//   for(i = 0; i < bullets.length; i++){
+//     // if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
+//     //   bullets.splice(i,1);
+//     // }
+//     let distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
+//     if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
+//
+//       // littlepizzas.push(new Rock(pizzas[j].x - width/45, pizzas[j].y - width/45, width/20));
+//       pizzas[j].xVelocity *= -1;
+//       pizzas[j].yVelocity *= -1;
+//
+// pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
+// pizzas[j].r = pizzas[j].r/2;
+//
+//
+//
+//       bullets.splice(i,1);
+//
+//
+//     }
+//     if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
+//       pizzas.splice(j,1);
+//       bullets.splice(i,1);
+//     }
+//
+//   }
+//   let distance2 = dist(pizzas[j].x, pizzas[j].y, ship.x1, ship.y1);
+//   let distance3 = dist(pizzas[j].x, pizzas[j].y, ship.x1 - width/110, ship.y1 + height/25);
+//   let distance4 = dist(pizzas[j].x, pizzas[j].y, ship.x1 + width/110, ship.y1 + height/25);
+//   if(distance2 <= pizzas[j].r/2 || distance3 <= pizzas[j].r/2 || distance4 <= pizzas[j].r/2){
+//     end = true;
+//   }
+// }
   if(ship.xVelocity >= width/300){
     ship.xVelocity = width/300;
   }
@@ -293,5 +300,5 @@ function mousePressed(){
 function controlPanel(){
   fill(0);
   stroke(0);
-  rect(0, height - height/8, width, height/8);
+  rect(0, height - height/6, width, height/6);
 }
