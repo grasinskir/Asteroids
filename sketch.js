@@ -207,14 +207,14 @@ function draw() {
     ship.x1 = 0;
   }
   if(ship.y1 < -height/30){
-    // controlPanel();
+    controlPanel();
     ship.y1 = height - height/6;
   }
   if(ship.y1 > height - height/6){
     controlPanel();
-  //   if(ship.y1 > height - height/6 + height/30){
-  //   ship.y1 = 0;
-  // }
+    if(ship.y1 > height - height/6 + height/30){
+    ship.y1 = 0;
+  }
   }
   for(i = 0; i < pizzas.length; i++){
     if(pizzas[i].x < -width/10){
