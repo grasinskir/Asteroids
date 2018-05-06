@@ -112,7 +112,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   ship = new Spacecraft();
   r = width/10;
-  for(i = 0; i < 10; i++){
+  for(let i = 0; i < 10; i++){
   pizzas[i] = new Rock(random(0, width), random(0, height), r);
 }
 }
@@ -121,7 +121,7 @@ function draw() {
   let r = width/10;
 
   background(100);
-  while(control){
+  if(control){
   controlPanel();
 }
 //   for(i = 0; i < bullets.length; i++){
@@ -207,14 +207,14 @@ function draw() {
     ship.x1 = 0;
   }
   if(ship.y1 < -height/30){
-    controlPanel();
+    // controlPanel();
     ship.y1 = height - height/6;
   }
   if(ship.y1 > height - height/6){
     controlPanel();
-    if(ship.y1 > height - height/6 + height/30){
-    ship.y1 = 0;
-  }
+  //   if(ship.y1 > height - height/6 + height/30){
+  //   ship.y1 = 0;
+  // }
   }
   for(i = 0; i < pizzas.length; i++){
     if(pizzas[i].x < -width/10){
@@ -287,9 +287,10 @@ function draw() {
 }
 
 function mousePressed(){
+  for(i = 0; i < bullets.length; i++){
+
   if(mouseX >= width/4 && mouseX <= width/2){
     bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
-    for(i = 0; i < bullets.length; i++){
 
       bullets[i].makeBullet();
       bullets[i].moveBullet();
