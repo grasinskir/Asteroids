@@ -287,11 +287,11 @@ function draw() {
 }
 
 function mousePressed(){
-  for(i = 0; i < bullets.length; i++){
+
 
   if(mouseX >= width/4 && mouseX <= width/2){
     bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
-
+    for(i = 0; i < bullets.length; i++){
       bullets[i].makeBullet();
       bullets[i].moveBullet();
     }
