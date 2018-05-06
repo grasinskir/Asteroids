@@ -28,6 +28,7 @@ class Spacecraft{
       stroke(255);
       triangle(0, 0, -width/110, height/25, width/110, height/25);
     pop();
+    controlPanel();
   }
 
   moveShip(){
@@ -44,7 +45,7 @@ class Spacecraft{
       this.xacceleration = width/10000*sin(this.heading);
       this.y1 -= this.yVelocity;
       this.x1 += this.xVelocity;
-
+      controlPanel();
   }
 
 
@@ -63,27 +64,13 @@ class Rock{
     stroke(255);
     noFill();
     ellipse(this.x, this.y, this.r, this.r);
+    controlPanel();
   }
 
   moveRock(){
     this.x += this.xVelocity;
     this.y += this.yVelocity;
-  }
-
-  doubleRock(){
-    stroke(255);
-    noFill();
-    ellipse(this.x, this.y, this.r/2, this.r/2);
-    this.x += this.xVelocity;
-    this.y += this.yVelocity;
-  }
-
-  inversedoubleRock(){
-    stroke(255);
-    noFill();
-    ellipse(this.x, this.y, this.r/2, this.r/2);
-    this.x -= this.xVelocity;
-    this.y -= this.yVelocity;
+    controlPanel();
   }
 }
 
@@ -100,11 +87,13 @@ class Projectile{
     noFill();
     stroke(255);
     ellipse(this.x, this.y, this.r, this.r);
+    controlPanel();
   }
 
   moveBullet(){
     this.x += this.xVelocity;
     this.y -= this.yVelocity;
+    controlPanel();
   }
 }
 
@@ -121,9 +110,8 @@ function draw() {
   let r = width/10;
 
   background(100);
-  if(control){
   controlPanel();
-}
+
 //   for(i = 0; i < bullets.length; i++){
 //   shoot = createButton('shoot');
 //   shoot.position(width/3.5, height/1.5);
@@ -207,14 +195,10 @@ function draw() {
     ship.x1 = 0;
   }
   if(ship.y1 < -height/30){
-    controlPanel();
     ship.y1 = height - height/6;
   }
-  if(ship.y1 > height - height/6){
-    controlPanel();
-    if(ship.y1 > height - height/6 + height/30){
+  if(ship.y1 > height - height/6 + height/30){
     ship.y1 = 0;
-  }
   }
   for(i = 0; i < pizzas.length; i++){
     if(pizzas[i].x < -width/10){
