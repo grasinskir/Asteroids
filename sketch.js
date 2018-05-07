@@ -131,7 +131,7 @@ function draw() {
 //   pizzas[n].doubleRock();
 //   pizzas[n].inversedoubleRock();
 // }
-  if(mouseIsPressed && mouseX <= width/4){
+  if(mouseIsPressed && mouseX >= width/10 && mouseX <= width/5 && mouseY >= height - height/4 && mouseY <= height - height/9.5){
     ship.heading -= 5;
   }
   if(keyCode === 65){
@@ -195,9 +195,9 @@ function draw() {
     ship.x1 = 0;
   }
   if(ship.y1 < -height/30){
-    ship.y1 = height - height/6;
+    ship.y1 = height;
   }
-  if(ship.y1 > height - height/6 + height/30){
+  if(ship.y1 > height + height/30){
     ship.y1 = 0;
   }
   for(i = 0; i < pizzas.length; i++){
@@ -285,5 +285,13 @@ function mousePressed(){
 function controlPanel(){
   fill(0);
   stroke(0);
-  rect(0, height - height/6, width, height/6);
+  rect(width/10, height - height/4, width/10, height/7);
+  rect(width - width/5, height - height/4, width/10, height/7);
+  rect(width/2 - width/6, height - height/4, width/10, height/7);
+  rect(width/2 + width/16, height - height/4, width/10, height/7);
+  fill(255);
+  text("Left", width/7.3, height - height/5.7);
+  text("Shoot", width/2 - width/7.5, height - height/5.7);
+  text("Forward", width/2 + width/10, height - height/5.7);
+  text("Right", width - width/6.5, height - height/5.7);
 }
