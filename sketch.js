@@ -5,6 +5,8 @@ let bullets = [];
 let shoot;
 let end = false;
 let control = true;
+let red = true;
+let blue = true;
 
 class Spacecraft{
   constructor(){
@@ -131,22 +133,31 @@ function draw() {
 //   pizzas[n].doubleRock();
 //   pizzas[n].inversedoubleRock();
 // }
-  if(mouseIsPressed && mouseX >= width/10 && mouseX <= width/5 && mouseY >= height - height/4 && mouseY <= height - height/9.5){
+  if(mouseIsPressed && mouseX >= width/24 - width/40 && mouseX <= width/24 + width/40 && mouseY >= height - height/4 - width/40 && mouseY <= height - height/4 + width/40){
     ship.heading -= 5;
+    blue = false;
+  } else {
+    blue = true;
   }
   if(keyCode === 65){
     ship.heading -= 5;
   }
 
-  if(mouseIsPressed && mouseX >= width - width/4){
+  if(mouseIsPressed && mouseX >= width/7.5 - width/40 && mouseX <= width/7.5 + width/40 && mouseY >= height - height/4 - width/40 && mouseY <= height - height/4 + width/40){
     ship.heading += 5;
+    blue = false;
+  } else {
+    blue = true;
   }
   if(keyCode === 68){
     ship.heading += 5;
   }
-  if(mouseIsPressed && mouseX >= width/2 && mouseX <= width-width/4 && mouseY >= height - height/6){
+  if(mouseIsPressed && mouseX >= width/11.5 - width/40 && mouseX <= width/11.5 + width/40 && mouseY >= height - height/2.85 - width/40 && mouseY <= height - height/2.85 + width/40){
     ship.yVelocity += ship.yacceleration;
     ship.xVelocity += ship.xacceleration;
+    blue = false;
+  } else {
+    blue = true;
   }
 
   if(ship.yVelocity < 0 && !mouseIsPressed){
@@ -273,8 +284,9 @@ function draw() {
 function mousePressed(){
 
 
-  if(mouseX >= width/4 && mouseX <= width/2){
+  if(mouseX >= width - width/11.5 - width/40 && mouseX <= width - width/11.5 + width/40 && mouseY >= height - height/4 - width/40 && mouseY <= height - height/4 + width/40){
     bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
+    red = false;
     for(i = 0; i < bullets.length; i++){
       bullets[i].makeBullet();
       bullets[i].moveBullet();
@@ -282,16 +294,28 @@ function mousePressed(){
   }
 }
 
+
 function controlPanel(){
-  fill(0);
+  if(blue){
+  fill('rgba(0, 0, 255, 0.1)');
   stroke(0);
-  rect(width/10, height - height/4, width/10, height/7);
-  rect(width - width/5, height - height/4, width/10, height/7);
-  rect(width/2 - width/6, height - height/4, width/10, height/7);
-  rect(width/2 + width/16, height - height/4, width/10, height/7);
-  fill(255);
-  text("Left", width/7.3, height - height/5.7);
-  text("Shoot", width/2 - width/7.5, height - height/5.7);
-  text("Forward", width/2 + width/10, height - height/5.7);
-  text("Right", width - width/6.5, height - height/5.7);
+  ellipse(width/24, height - height/4, width/20, width/20);
+  ellipse(width/7.5, height - height/4, width/20, width/20);
+  ellipse(width/11.5, height - height/2.85, width/20, width/20);
+} else {
+  fill('rgba(0, 0, 100, 0.1)');
+  stroke(0);
+  ellipse(width/24, height - height/4, width/20, width/20);
+  ellipse(width/7.5, height - height/4, width/20, width/20);
+  ellipse(width/11.5, height - height/2.85, width/20, width/20);
+}
+if(red){
+  fill('rgba(255, 0, 0, 0.1)');
+  stroke(0);
+  ellipse(width - width/11.5, height - height/4, width/20, width/20);
+} else {
+  fill('rgba(100, 0, 0, 0.1)');
+  stroke(0);
+  ellipse(width - width/11.5, height - height/4, width/20, width/20);
+}
 }
