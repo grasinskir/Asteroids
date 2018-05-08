@@ -6,7 +6,9 @@ let shoot;
 let end = false;
 let control = true;
 let red = true;
-let blue = true;
+let blue1 = true;
+let blue2 = true;
+let blue3 = true;
 
 class Spacecraft{
   constructor(){
@@ -135,32 +137,39 @@ function draw() {
 // }
   if(mouseIsPressed && mouseX >= width/24 - width/40 && mouseX <= width/24 + width/40 && mouseY >= height - height/4 - width/40 && mouseY <= height - height/4 + width/40){
     ship.heading -= 5;
-    blue = false;
+    blue1 = false;
   } else {
-    blue = true;
+    blue1 = true;
   }
-  if(keyCode === 65){
+  if(keyIsDown(65)){
     ship.heading -= 5;
+    blue1 = false;
   }
-
   if(mouseIsPressed && mouseX >= width/7.5 - width/40 && mouseX <= width/7.5 + width/40 && mouseY >= height - height/4 - width/40 && mouseY <= height - height/4 + width/40){
     ship.heading += 5;
-    blue = false;
+    blue2 = false;
   } else {
-    blue = true;
+    blue2 = true;
   }
-  if(keyCode === 68){
+  if(keyIsDown(68)){
     ship.heading += 5;
+    blue2 = false;
   }
   if(mouseIsPressed && mouseX >= width/11.5 - width/40 && mouseX <= width/11.5 + width/40 && mouseY >= height - height/2.85 - width/40 && mouseY <= height - height/2.85 + width/40){
     ship.yVelocity += ship.yacceleration;
     ship.xVelocity += ship.xacceleration;
-    blue = false;
+    blue3 = false;
   } else {
-    blue = true;
+    blue3 = true;
+  }
+  if(keyIsDown(87)){
+    ship.yVelocity += ship.yacceleration;
+    ship.xVelocity += ship.xacceleration;
+    blue3 = false;
   }
 
-  if(ship.yVelocity < 0 && !mouseIsPressed){
+
+  if(ship.yVelocity < 0 && !mouseIsPressed && !keyIsDown(87)){
     ship.yVelocity += abs(ship.yacceleration);
 
     if(ship.yVelocity < 0 && ship.yVelocity > ship.yacceleration && !mouseIsPressed){
@@ -169,7 +178,7 @@ function draw() {
       ship.xVelocity = 0;
     }
   }
-  if(ship.yVelocity > 0 && !mouseIsPressed){
+  if(ship.yVelocity > 0 && !mouseIsPressed && !keyIsDown(87)){
 
     ship.yVelocity -= abs(ship.yacceleration);
 
@@ -179,7 +188,7 @@ function draw() {
       ship.xVelocity = 0;
     }
   }
-  if(ship.xVelocity > 0 && !mouseIsPressed){
+  if(ship.xVelocity > 0 && !mouseIsPressed && !keyIsDown(87)){
 
     ship.xVelocity -= abs(ship.xacceleration);
 
@@ -189,7 +198,7 @@ function draw() {
       ship.yVelocity = 0;
     }
   }
-  if(ship.xVelocity < 0 && !mouseIsPressed){
+  if(ship.xVelocity < 0 && !mouseIsPressed && !keyIsDown(87)){
 
     ship.xVelocity += abs(ship.xacceleration);
 
@@ -225,41 +234,41 @@ function draw() {
       pizzas[i].y = -width/10;
     }
   }
-//   for(j = 0; j < pizzas.length; j++){
-//
-//   for(i = 0; i < bullets.length; i++){
-//     // if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
-//     //   bullets.splice(i,1);
-//     // }
-//     let distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
-//     if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
-//
-//       // littlepizzas.push(new Rock(pizzas[j].x - width/45, pizzas[j].y - width/45, width/20));
-//       pizzas[j].xVelocity *= -1;
-//       pizzas[j].yVelocity *= -1;
-//
-// pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
-// pizzas[j].r = pizzas[j].r/2;
-//
-//
-//
-//       bullets.splice(i,1);
-//
-//
-//     }
-//     if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
-//       pizzas.splice(j,1);
-//       bullets.splice(i,1);
-//     }
-//
-//   }
-//   let distance2 = dist(pizzas[j].x, pizzas[j].y, ship.x1, ship.y1);
-//   let distance3 = dist(pizzas[j].x, pizzas[j].y, ship.x1 - width/110, ship.y1 + height/25);
-//   let distance4 = dist(pizzas[j].x, pizzas[j].y, ship.x1 + width/110, ship.y1 + height/25);
-//   if(distance2 <= pizzas[j].r/2 || distance3 <= pizzas[j].r/2 || distance4 <= pizzas[j].r/2){
-//     end = true;
-//   }
-// }
+  for(j = 0; j < pizzas.length; j++){
+
+  for(i = 0; i < bullets.length; i++){
+    // if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
+    //   bullets.splice(i,1);
+    // }
+    let distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
+    if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
+
+      // littlepizzas.push(new Rock(pizzas[j].x - width/45, pizzas[j].y - width/45, width/20));
+      pizzas[j].xVelocity *= -1;
+      pizzas[j].yVelocity *= -1;
+
+pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
+pizzas[j].r = pizzas[j].r/2;
+
+
+
+      bullets.splice(i,1);
+
+
+    }
+    if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
+      pizzas.splice(j,1);
+      bullets.splice(i,1);
+    }
+
+  }
+  let distance2 = dist(pizzas[j].x, pizzas[j].y, ship.x1, ship.y1);
+  let distance3 = dist(pizzas[j].x, pizzas[j].y, ship.x1 - width/110, ship.y1 + height/25);
+  let distance4 = dist(pizzas[j].x, pizzas[j].y, ship.x1 + width/110, ship.y1 + height/25);
+  if(distance2 <= pizzas[j].r/2 || distance3 <= pizzas[j].r/2 || distance4 <= pizzas[j].r/2){
+    end = true;
+  }
+}
   if(ship.xVelocity >= width/300){
     ship.xVelocity = width/300;
   }
@@ -278,7 +287,7 @@ function draw() {
     stroke(255);
     text("Game Over", width/2, height/2);
   }
-
+red = true;
 }
 
 function mousePressed(){
@@ -294,20 +303,45 @@ function mousePressed(){
   }
 }
 
+function keyTyped(){
+  if(keyCode === 32){
+    bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
+    red = false;
+    for(i = 0; i < bullets.length; i++){
+      bullets[i].makeBullet();
+      bullets[i].moveBullet();
+    }
+  }
+}
+
 
 function controlPanel(){
-  if(blue){
+  if(blue1){
   fill('rgba(0, 0, 255, 0.1)');
   stroke(0);
   ellipse(width/24, height - height/4, width/20, width/20);
-  ellipse(width/7.5, height - height/4, width/20, width/20);
-  ellipse(width/11.5, height - height/2.85, width/20, width/20);
 } else {
   fill('rgba(0, 0, 100, 0.1)');
   stroke(0);
   ellipse(width/24, height - height/4, width/20, width/20);
+}
+  if(blue2){
+  fill('rgba(0, 0, 255, 0.1)');
+  stroke(0);
   ellipse(width/7.5, height - height/4, width/20, width/20);
-  ellipse(width/11.5, height - height/2.85, width/20, width/20);
+} else {
+  fill('rgba(0, 0, 100, 0.1)');
+  stroke(0);
+  ellipse(width/7.5, height - height/4, width/20, width/20);
+}
+if(blue3){
+fill('rgba(0, 0, 255, 0.1)');
+stroke(0);
+ellipse(width/11.5, height - height/2.85, width/20, width/20);
+} else {
+fill('rgba(0, 0, 100, 0.1)');
+stroke(0);
+ellipse(width/11.5, height - height/2.85, width/20, width/20);
 }
 if(red){
   fill('rgba(255, 0, 0, 0.1)');
