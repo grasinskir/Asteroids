@@ -9,6 +9,7 @@ let red = true;
 let blue1 = true;
 let blue2 = true;
 let blue3 = true;
+let count = 0;
 
 class Spacecraft{
   constructor(){
@@ -237,9 +238,7 @@ function draw() {
   for(j = 0; j < pizzas.length; j++){
 
   for(i = 0; i < bullets.length; i++){
-    // if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
-    //   bullets.splice(i,1);
-    // }
+
     let distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
     if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
 
@@ -247,27 +246,39 @@ function draw() {
       pizzas[j].xVelocity *= -1;
       pizzas[j].yVelocity *= -1;
 
-pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
-pizzas[j].r = pizzas[j].r/2;
+      pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
+      pizzas[j].r = pizzas[j].r/2;
 
 
 
       bullets.splice(i,1);
-
-
+      i--;
     }
+    // if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
+    //   pizzas.splice(j,1);
+    //   j--;
+    //   bullets.splice(i,1);
+    // }
     if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
       pizzas.splice(j,1);
+      // j--;
       bullets.splice(i,1);
+      i--;
+      let r = width/10;
+      pizzas.push(new Rock(random(width + width/2, 2*width), random(0 - height/2, 0 - height), r));
     }
 
   }
-  let distance2 = dist(pizzas[j].x, pizzas[j].y, ship.x1, ship.y1);
-  let distance3 = dist(pizzas[j].x, pizzas[j].y, ship.x1 - width/110, ship.y1 + height/25);
-  let distance4 = dist(pizzas[j].x, pizzas[j].y, ship.x1 + width/110, ship.y1 + height/25);
-  if(distance2 <= pizzas[j].r/2 || distance3 <= pizzas[j].r/2 || distance4 <= pizzas[j].r/2){
-    end = true;
-  }
+
+
+}
+for(j = 0; j < pizzas.length; j++){
+let distance2 = dist(pizzas[j].x, pizzas[j].y, ship.x1, ship.y1);
+let distance3 = dist(pizzas[j].x, pizzas[j].y, ship.x1 - width/110, ship.y1 + height/25);
+let distance4 = dist(pizzas[j].x, pizzas[j].y, ship.x1 + width/110, ship.y1 + height/25);
+if(distance2 <= pizzas[j].r/2 || distance3 <= pizzas[j].r/2 || distance4 <= pizzas[j].r/2){
+  end = true;
+}
 }
   if(ship.xVelocity >= width/300){
     ship.xVelocity = width/300;
@@ -288,6 +299,12 @@ pizzas[j].r = pizzas[j].r/2;
     text("Game Over", width/2, height/2);
   }
 red = true;
+for(i = 0; i < bullets.length; i++){
+if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
+  bullets.splice(i,1);
+  i--;
+}
+}
 }
 
 function mousePressed(){
