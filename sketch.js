@@ -10,6 +10,8 @@ let blue1 = true;
 let blue2 = true;
 let blue3 = true;
 let count = 0;
+let score = 0;
+let click = true;
 
 class Spacecraft{
   constructor(){
@@ -107,16 +109,24 @@ function setup() {
   ship = new Spacecraft();
   r = width/10;
   for(let i = 0; i < 10; i++){
-  pizzas[i] = new Rock(random(0, width), random(0, height), r);
+  pizzas[i] = new Rock(random(0, width), random(-height, 0), r);
 }
+  textSize(30);
 }
 let p = 0;
 function draw() {
   let r = width/10;
+  if(click){
+    sleep(2000);
+    start();
+  } else {
+
 
   background(100);
   controlPanel();
-
+  fill(255);
+  text("Score", width/2 - width/75, height/4);
+  text(score, width/2, height/4 + height/32);
 //   for(i = 0; i < bullets.length; i++){
 //   shoot = createButton('shoot');
 //   shoot.position(width/3.5, height/1.5);
@@ -248,7 +258,7 @@ function draw() {
 
       pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
       pizzas[j].r = pizzas[j].r/2;
-
+      score++;
 
 
       bullets.splice(i,1);
@@ -265,7 +275,8 @@ function draw() {
       bullets.splice(i,1);
       i--;
       let r = width/10;
-      pizzas.push(new Rock(random(width + width/2, 2*width), random(0 - height/2, 0 - height), r));
+      pizzas.push(new Rock(random(0, width), random(-height, 0), r));
+      score++;
     }
 
   }
@@ -278,6 +289,7 @@ let distance3 = dist(pizzas[j].x, pizzas[j].y, ship.x1 - width/110, ship.y1 + he
 let distance4 = dist(pizzas[j].x, pizzas[j].y, ship.x1 + width/110, ship.y1 + height/25);
 if(distance2 <= pizzas[j].r/2 || distance3 <= pizzas[j].r/2 || distance4 <= pizzas[j].r/2){
   end = true;
+  score = 0;
 }
 }
   if(ship.xVelocity >= width/300){
@@ -297,6 +309,8 @@ if(distance2 <= pizzas[j].r/2 || distance3 <= pizzas[j].r/2 || distance4 <= pizz
     fill(255);
     stroke(255);
     text("Game Over", width/2, height/2);
+    end = false;
+    click = true;
   }
 red = true;
 for(i = 0; i < bullets.length; i++){
@@ -306,9 +320,11 @@ if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[
 }
 }
 }
+}
 
 function mousePressed(){
-
+console.log(mouseX);
+console.log(mouseY);
 
   if(mouseX >= width - width/11.5 - width/40 && mouseX <= width - width/11.5 + width/40 && mouseY >= height - height/4 - width/40 && mouseY <= height - height/4 + width/40){
     bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
@@ -317,6 +333,9 @@ function mousePressed(){
       bullets[i].makeBullet();
       bullets[i].moveBullet();
     }
+  }
+  if(mouseX >= width/2 - width/25 && mouseX <= width/2 + width/25 && mouseY >= height/2 - height/25 && mouseY <= height/2 + height/25){
+    click = false;
   }
 }
 
@@ -369,4 +388,22 @@ if(red){
   stroke(0);
   ellipse(width - width/11.5, height - height/4, width/20, width/20);
 }
+}
+
+function start(){
+  background(100);
+  fill(255);
+  text("Lord of the Pies", width/2 - width/20, height/4);
+  text("Start", width/2 - width/75, height/2);
+
+}
+
+function sleep(milliseconds) {
+  // Delay for when you die so you can see how you die
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
 }
