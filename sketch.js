@@ -12,6 +12,11 @@ let blue3 = true;
 let count = 0;
 let score = 0;
 let click = true;
+let pie;
+
+function preload(){
+  pie = loadImage("cherrypie.png");
+}
 
 class Spacecraft{
   constructor(){
@@ -33,27 +38,36 @@ class Spacecraft{
       rotate(this.heading);
       noFill();
       stroke(255);
-      triangle(0, 0, -width/110, height/25, width/110, height/25);
+      // triangle(0, 0, -width/110, height/25, width/110, height/25);
+      imageMode(CENTER);
+      image(pie, 0, 0, width/10, width/15);
     pop();
+    angleMode(DEGREES);
+    this.yacceleration = width/10000*cos(this.heading);
+    this.xacceleration = width/10000*sin(this.heading);
+    this.y1 -= this.yVelocity;
+    this.x1 += this.xVelocity;
     controlPanel();
   }
 
-  moveShip(){
-    push();
-      translate(this.x1, this.y1);
-      angleMode(DEGREES);
-      rotate(this.heading);
-      noFill();
-      stroke(255);
-      triangle(0, 0, -width/110, height/25, width/110, height/25);
-      pop();
-      angleMode(DEGREES);
-      this.yacceleration = width/10000*cos(this.heading);
-      this.xacceleration = width/10000*sin(this.heading);
-      this.y1 -= this.yVelocity;
-      this.x1 += this.xVelocity;
-      controlPanel();
-  }
+  // moveShip(){
+  //   push();
+  //     translate(this.x1, this.y1);
+  //     angleMode(DEGREES);
+  //     rotate(this.heading);
+  //     noFill();
+  //     stroke(255);
+  //     // triangle(0, 0, -width/110, height/25, width/110, height/25);
+  //     imageMode(CENTER);
+  //     image(pie, 0, 0, -width/110, height/25, width/110, height/25);
+  //     pop();
+  //     angleMode(DEGREES);
+  //     this.yacceleration = width/10000*cos(this.heading);
+  //     this.xacceleration = width/10000*sin(this.heading);
+  //     this.y1 -= this.yVelocity;
+  //     this.x1 += this.xVelocity;
+  //     controlPanel();
+  // }
 
 
 }
@@ -91,8 +105,8 @@ class Projectile{
   }
 
   makeBullet(){
-    noFill();
-    stroke(255);
+    fill(0, 0, 255);
+    noStroke();
     ellipse(this.x, this.y, this.r, this.r);
     controlPanel();
   }
@@ -133,7 +147,7 @@ function draw() {
 //   shoot.mousePressed(bullets[i].makeBullet);
 // }
   ship.makeShip();
-  ship.moveShip();
+  // ship.moveShip();
   for(let i = 0; i < bullets.length; i++){
     bullets[i].makeBullet();
     bullets[i].moveBullet();
@@ -393,7 +407,7 @@ if(red){
 function start(){
   background(100);
   fill(255);
-  text("Lord of the Pies", width/2 - width/20, height/4);
+  text("Master of Pie", width/2 - width/20, height/4);
   text("Start", width/2 - width/75, height/2);
 
 }
