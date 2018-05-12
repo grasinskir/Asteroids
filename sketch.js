@@ -13,9 +13,17 @@ let count = 0;
 let score = 0;
 let click = true;
 let pie;
+let pizza;
+let spacebackground;
+let gamebackground;
+let endgame;
 
 function preload(){
-  pie = loadImage("cherrypie.png");
+  pie = loadImage("blueberrypie.png");
+  pizza = loadImage("pizza.png");
+  spacebackground = loadImage("space.png");
+  gamebackground = loadImage("spacetemplate.png");
+  endgame = loadImage("endgame.png");
 }
 
 class Spacecraft{
@@ -40,7 +48,7 @@ class Spacecraft{
       stroke(255);
       // triangle(0, 0, -width/110, height/25, width/110, height/25);
       imageMode(CENTER);
-      image(pie, 0, 0, width/10, width/15);
+      image(pie, 0, 0, width/55, width/35);
     pop();
     angleMode(DEGREES);
     this.yacceleration = width/10000*cos(this.heading);
@@ -84,7 +92,9 @@ class Rock{
   makeRock(){
     stroke(255);
     noFill();
-    ellipse(this.x, this.y, this.r, this.r);
+    // ellipse(this.x, this.y, this.r, this.r);
+    imageMode(CENTER);
+    image(pizza, this.x, this.y, this.r, this.r);
     controlPanel();
   }
 
@@ -120,11 +130,11 @@ class Projectile{
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  ship = new Spacecraft();
-  r = width/10;
-  for(let i = 0; i < 10; i++){
-  pizzas[i] = new Rock(random(0, width), random(-height, 0), r);
-}
+  // ship = new Spacecraft();
+//   r = width/10;
+//   for(let i = 0; i < 10; i++){
+//   pizzas[i] = new Rock(random(0, width), random(-height, 0), r);
+// }
   textSize(30);
 }
 let p = 0;
@@ -136,16 +146,12 @@ function draw() {
   } else {
 
 
-  background(100);
+  imageMode(CENTER);
+  image(spacebackground, width/2, height/2, width, height);
   controlPanel();
   fill(255);
   text("Score", width/2 - width/75, height/4);
   text(score, width/2, height/4 + height/32);
-//   for(i = 0; i < bullets.length; i++){
-//   shoot = createButton('shoot');
-//   shoot.position(width/3.5, height/1.5);
-//   shoot.mousePressed(bullets[i].makeBullet);
-// }
   ship.makeShip();
   // ship.moveShip();
   for(let i = 0; i < bullets.length; i++){
@@ -160,7 +166,7 @@ function draw() {
 //   pizzas[n].doubleRock();
 //   pizzas[n].inversedoubleRock();
 // }
-  if(mouseIsPressed && mouseX >= width/24 - width/40 && mouseX <= width/24 + width/40 && mouseY >= height - height/4 - width/40 && mouseY <= height - height/4 + width/40){
+  if(mouseIsPressed && mouseX >= width/24 - width/30 && mouseX <= width/24 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30){
     ship.heading -= 5;
     blue1 = false;
   } else {
@@ -170,7 +176,7 @@ function draw() {
     ship.heading -= 5;
     blue1 = false;
   }
-  if(mouseIsPressed && mouseX >= width/7.5 - width/40 && mouseX <= width/7.5 + width/40 && mouseY >= height - height/4 - width/40 && mouseY <= height - height/4 + width/40){
+  if(mouseIsPressed && mouseX >= width/6.2 - width/30 && mouseX <= width/6.2 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30){
     ship.heading += 5;
     blue2 = false;
   } else {
@@ -180,7 +186,7 @@ function draw() {
     ship.heading += 5;
     blue2 = false;
   }
-  if(mouseIsPressed && mouseX >= width/11.5 - width/40 && mouseX <= width/11.5 + width/40 && mouseY >= height - height/2.85 - width/40 && mouseY <= height - height/2.85 + width/40){
+  if(mouseIsPressed && mouseX >= width/9.9 - width/30 && mouseX <= width/9.9 + width/30 && mouseY >= height - height/3.2 - width/30 && mouseY <= height - height/3.2 + width/30){
     ship.yVelocity += ship.yacceleration;
     ship.xVelocity += ship.xacceleration;
     blue3 = false;
@@ -319,7 +325,8 @@ if(distance2 <= pizzas[j].r/2 || distance3 <= pizzas[j].r/2 || distance4 <= pizz
     ship.yVelocity = -width/300;
   }
   if(end){
-    background(100);
+    imageMode(CENTER);
+    image(endgame, width/2, height/2, width, height);
     fill(255);
     stroke(255);
     text("Game Over", width/2, height/2);
@@ -340,7 +347,7 @@ function mousePressed(){
 console.log(mouseX);
 console.log(mouseY);
 
-  if(mouseX >= width - width/11.5 - width/40 && mouseX <= width - width/11.5 + width/40 && mouseY >= height - height/4 - width/40 && mouseY <= height - height/4 + width/40){
+  if(mouseX >= width - width/11.5 - width/30 && mouseX <= width - width/11.5 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30){
     bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
     red = false;
     for(i = 0; i < bullets.length; i++){
@@ -369,46 +376,53 @@ function controlPanel(){
   if(blue1){
   fill('rgba(0, 0, 255, 0.1)');
   stroke(0);
-  ellipse(width/24, height - height/4, width/20, width/20);
+  ellipse(width/24, height - height/6, width/15, width/15);
 } else {
   fill('rgba(0, 0, 100, 0.1)');
   stroke(0);
-  ellipse(width/24, height - height/4, width/20, width/20);
+  ellipse(width/24, height - height/6, width/15, width/15);
 }
   if(blue2){
   fill('rgba(0, 0, 255, 0.1)');
   stroke(0);
-  ellipse(width/7.5, height - height/4, width/20, width/20);
+  ellipse(width/6.2, height - height/6, width/15, width/15);
 } else {
   fill('rgba(0, 0, 100, 0.1)');
   stroke(0);
-  ellipse(width/7.5, height - height/4, width/20, width/20);
+  ellipse(width/6.2, height - height/6, width/15, width/15);
 }
 if(blue3){
 fill('rgba(0, 0, 255, 0.1)');
 stroke(0);
-ellipse(width/11.5, height - height/2.85, width/20, width/20);
+ellipse(width/9.9, height - height/3.3, width/15, width/15);
 } else {
 fill('rgba(0, 0, 100, 0.1)');
 stroke(0);
-ellipse(width/11.5, height - height/2.85, width/20, width/20);
+ellipse(width/9.9, height - height/3.3, width/15, width/15);
 }
 if(red){
   fill('rgba(255, 0, 0, 0.1)');
   stroke(0);
-  ellipse(width - width/11.5, height - height/4, width/20, width/20);
+  ellipse(width - width/11.5, height - height/6, width/15, width/15);
 } else {
   fill('rgba(100, 0, 0, 0.1)');
   stroke(0);
-  ellipse(width - width/11.5, height - height/4, width/20, width/20);
+  ellipse(width - width/11.5, height - height/6, width/15, width/15);
 }
 }
 
 function start(){
-  background(100);
+  imageMode(CENTER);
+  image(gamebackground, width/2, height/2, width, height);
   fill(255);
   text("Master of Pie", width/2 - width/20, height/4);
   text("Start", width/2 - width/75, height/2);
+  pizzas = [];
+  ship = new Spacecraft();
+  r = width/10;
+  for(let i = 0; i < 10; i++){
+  pizzas[i] = new Rock(random(0, width), random(-height, 0), r);
+}
 
 }
 
