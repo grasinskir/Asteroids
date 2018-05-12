@@ -115,8 +115,8 @@ class Projectile{
   }
 
   makeBullet(){
-    fill(0, 0, 255);
-    noStroke();
+    fill(255, 0, 0);
+    noStroke;
     ellipse(this.x, this.y, this.r, this.r);
     controlPanel();
   }
