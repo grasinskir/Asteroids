@@ -1,34 +1,53 @@
+// Ship variables
 let ship;
 let moveForward;
+let pie;
+
+// Pizza variables
 let pizzas = [];
+let pizza;
+
+// Bullet variables
 let bullets = [];
 let shoot;
+
+// Start, end, and score variables
 let end = false;
-let control = true;
-let red = true;
-let blue1 = true;
-let blue2 = true;
-let blue3 = true;
-let count = 0;
-let score = 0;
-let click = true;
-let pie;
-let pizza;
 let spacebackground;
 let gamebackground;
 let endgame;
-let mobile = false;
+let score = 0;
+let click = true;
 let click2 = true;
+let click3 = true;
+
+// Control panel variables
+let red1 = true;
+let blue1 = true;
+let blue2 = true;
+let blue3 = true;
+let mobile = false;
+let red2 = true;
 
 
 function preload(){
+  // Ship image
   pie = loadImage("blueberrypie.png");
+
+  // Asteroid image
   pizza = loadImage("pizza.png");
-  spacebackground = loadImage("space.png");
+
+  // Starting background
   gamebackground = loadImage("spacetemplate.png");
+
+  // During game background
+  spacebackground = loadImage("space.png");
+
+  // Endgame background
   endgame = loadImage("endgame.png");
 }
 
+// Ship
 class Spacecraft{
   constructor(){
     this.x1 = width/2;
@@ -42,47 +61,37 @@ class Spacecraft{
     this.xVelocity = 0;
   }
 
+  // Make, move, and rotate the ship
   makeShip(){
+    // Rotate
     push();
       translate(this.x1, this.y1);
       angleMode(DEGREES);
       rotate(this.heading);
       noFill();
       stroke(255);
-      // triangle(0, 0, -width/110, height/25, width/110, height/25);
       imageMode(CENTER);
       image(pie, 0, 0, width/55, width/35);
     pop();
+    // Move forward
     angleMode(DEGREES);
     this.yacceleration = width/10000*cos(this.heading);
     this.xacceleration = width/10000*sin(this.heading);
     this.y1 -= this.yVelocity;
     this.x1 += this.xVelocity;
+    // If one mobile game displays control panel
+    if(mobile){
     controlPanel();
   }
+  }
 
-  // moveShip(){
-  //   push();
-  //     translate(this.x1, this.y1);
-  //     angleMode(DEGREES);
-  //     rotate(this.heading);
-  //     noFill();
-  //     stroke(255);
-  //     // triangle(0, 0, -width/110, height/25, width/110, height/25);
-  //     imageMode(CENTER);
-  //     image(pie, 0, 0, -width/110, height/25, width/110, height/25);
-  //     pop();
-  //     angleMode(DEGREES);
-  //     this.yacceleration = width/10000*cos(this.heading);
-  //     this.xacceleration = width/10000*sin(this.heading);
-  //     this.y1 -= this.yVelocity;
-  //     this.x1 += this.xVelocity;
-  //     controlPanel();
-  // }
-
-
+  jumpShip(){
+    imageMode(CENTER)
+    image(pie, 0, 0, 0, 0);
+  }
 }
 
+// Pizzas/Asteroids
 class Rock{
   constructor(x, y, r){
     this.x = x;
@@ -92,26 +101,30 @@ class Rock{
     this.yVelocity = random(-height/500, height/500);
   }
 
+  // Make the pizza
   makeRock(){
     stroke(255);
     noFill();
-    // ellipse(this.x, this.y, this.r, this.r);
     imageMode(CENTER);
     image(pizza, this.x, this.y, this.r, this.r);
-    if(mobile){
-    controlPanel();
-  }
+      // If on mobile the control panel is displayed
+      if(mobile){
+      controlPanel();
+    }
   }
 
+  // Move the pizza at a constant, random velocity
   moveRock(){
     this.x += this.xVelocity;
     this.y += this.yVelocity;
-    if(mobile){
-    controlPanel();
-  }
+      // If on mobile the control panel is displayed
+      if(mobile){
+      controlPanel();
+    }
   }
 }
 
+// Bullets/blueberries
 class Projectile{
   constructor(xPos, yPos, angle){
     this.x = xPos;
@@ -121,365 +134,460 @@ class Projectile{
     this.yVelocity = width/100*cos(angle);
   }
 
+  // Make the bullet/blueberry
   makeBullet(){
     fill(0, 0, 255);
-    noStroke;
+    noStroke();
     ellipse(this.x, this.y, this.r, this.r);
-    if(mobile){
-    controlPanel();
-  }
+      // If on mobile the control panel is displayed
+      if(mobile){
+      controlPanel();
+    }
   }
 
+  // Move the bullet/blueberry
   moveBullet(){
     this.x += this.xVelocity;
     this.y -= this.yVelocity;
-    if(mobile){
-    controlPanel();
-  }
+      // If on mobile the control panel is displayed
+      if(mobile){
+      controlPanel();
+    }
   }
 }
 
 function setup() {
+  // Create the canvas and set a text size
   createCanvas(windowWidth, windowHeight);
-  // ship = new Spacecraft();
-//   r = width/10;
-//   for(let i = 0; i < 10; i++){
-//   pizzas[i] = new Rock(random(0, width), random(-height, 0), r);
-// }
   textSize(30);
-
 }
-let p = 0;
 
 function draw() {
-  let r = width/10;
+  // Very beginning screen
   if(click && click2){
     sleep(2000);
     start();
+
+    // Instructions screen
   } else if(click2 && click == false) {
     instructions();
+
+    // Game screen
   } else if(click2 == false && click == false) {
 
-
-  imageMode(CENTER);
-  image(spacebackground, width/2, height/2, width, height);
-  fill(255);
-  text("Score", width/2 - width/75, height/4);
-  text(score, width/2, height/4 + height/32);
-  ship.makeShip();
-  // ship.moveShip();
-  for(let i = 0; i < bullets.length; i++){
-    bullets[i].makeBullet();
-    bullets[i].moveBullet();
-  }
-  for(let i = 0; i < pizzas.length; i++){
-  pizzas[i].makeRock();
-  pizzas[i].moveRock();
-}
-// for(let n = 0; n < pizzas.length; n++){
-//   pizzas[n].doubleRock();
-//   pizzas[n].inversedoubleRock();
-// }
-if(mobile){
-  if(mouseIsPressed && mouseX >= width/24 - width/30 && mouseX <= width/24 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30){
-    ship.heading -= 5;
-    blue1 = false;
-  } else {
-    blue1 = true;
-  }
-}
-  if(keyIsDown(65)){
-    ship.heading -= 5;
-    blue1 = false;
-  } else {
-    blue1 = true;
-  }
-if(mobile){
-  if(mouseIsPressed && mouseX >= width/6.2 - width/30 && mouseX <= width/6.2 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30){
-    ship.heading += 5;
-    blue2 = false;
-  } else {
-    blue2 = true;
-  }
-}
-  if(keyIsDown(68)){
-    ship.heading += 5;
-    blue2 = false;
-  } else {
-    blue2 = true;
-  }
-if(mobile){
-  if(mouseIsPressed && mouseX >= width/9.9 - width/30 && mouseX <= width/9.9 + width/30 && mouseY >= height - height/3.2 - width/30 && mouseY <= height - height/3.2 + width/30){
-    ship.yVelocity += ship.yacceleration;
-    ship.xVelocity += ship.xacceleration;
-    blue3 = false;
-  } else {
-    blue3 = true;
-  }
-}
-  if(keyIsDown(87)){
-    ship.yVelocity += ship.yacceleration;
-    ship.xVelocity += ship.xacceleration;
-    blue3 = false;
-  } else {
-    blue3 = true;
-  }
-
-
-  if(ship.yVelocity < 0 && !mouseIsPressed && !keyIsDown(87)){
-    ship.yVelocity += abs(ship.yacceleration);
-
-    if(ship.yVelocity < 0 && ship.yVelocity > ship.yacceleration && !mouseIsPressed){
-      ship.yVelocity = 0;
-      ship.yacceleration2 = 0;
-      ship.xVelocity = 0;
-    }
-  }
-  if(ship.yVelocity > 0 && !mouseIsPressed && !keyIsDown(87)){
-
-    ship.yVelocity -= abs(ship.yacceleration);
-
-    if(ship.yVelocity > 0 && ship.yVelocity < ship.yacceleration && !mouseIsPressed){
-      ship.yVelocity = 0;
-      ship.yacceleration2 = 0;
-      ship.xVelocity = 0;
-    }
-  }
-  if(ship.xVelocity > 0 && !mouseIsPressed && !keyIsDown(87)){
-
-    ship.xVelocity -= abs(ship.xacceleration);
-
-    if(ship.xVelocity > 0 && ship.xVelocity < ship.xacceleration && !mouseIsPressed){
-      ship.xVelocity = 0;
-      ship.xacceleration2 = 0;
-      ship.yVelocity = 0;
-    }
-  }
-  if(ship.xVelocity < 0 && !mouseIsPressed && !keyIsDown(87)){
-
-    ship.xVelocity += abs(ship.xacceleration);
-
-    if(ship.xVelocity < 0 && ship.xVelocity > ship.xacceleration && !mouseIsPressed){
-      ship.xVelocity = 0;
-      ship.xacceleration2 = 0;
-      ship.yVelocity = 0;
-    }
-  }
-  if(ship.x1 < -height/30){
-    ship.x1 = width;
-  }
-  if(ship.x1 > width + height/30){
-    ship.x1 = 0;
-  }
-  if(ship.y1 < -height/30){
-    ship.y1 = height;
-  }
-  if(ship.y1 > height + height/30){
-    ship.y1 = 0;
-  }
-  for(i = 0; i < pizzas.length; i++){
-    if(pizzas[i].x < -width/10){
-      pizzas[i].x = width + width/10;
-    }
-    if(pizzas[i].x > width + width/10){
-      pizzas[i].x = -width/10;
-    }
-    if(pizzas[i].y < -width/10){
-      pizzas[i].y = height + width/10;
-    }
-    if(pizzas[i].y > height + width/10){
-      pizzas[i].y = -width/10;
-    }
-  }
-  for(j = 0; j < pizzas.length; j++){
-
-  for(i = 0; i < bullets.length; i++){
-
-    let distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
-    if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
-
-      // littlepizzas.push(new Rock(pizzas[j].x - width/45, pizzas[j].y - width/45, width/20));
-      pizzas[j].xVelocity *= -1;
-      pizzas[j].yVelocity *= -1;
-
-      pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
-      pizzas[j].r = pizzas[j].r/2;
-      score++;
-
-
-      bullets.splice(i,1);
-      i--;
-    }
-    // if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
-    //   pizzas.splice(j,1);
-    //   j--;
-    //   bullets.splice(i,1);
-    // }
-    if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
-      pizzas.splice(j,1);
-      // j--;
-      bullets.splice(i,1);
-      i--;
-      let p = width/10;
-      pizzas.push(new Rock(random(0, width), random(-height, 0), p));
-      score++;
-    }
-
-  }
-
-
-}
-for(j = 0; j < pizzas.length; j++){
-let distance2 = dist(pizzas[j].x, pizzas[j].y, ship.x1, ship.y1 - width/70);
-let distance3 = dist(pizzas[j].x, pizzas[j].y, ship.x1 - width/110, ship.y1 + width/70);
-let distance4 = dist(pizzas[j].x, pizzas[j].y, ship.x1 + width/110, ship.y1 + width/70);
-if(distance2 <= pizzas[j].r/4 || distance3 <= pizzas[j].r/4 || distance4 <= pizzas[j].r/4){
-  end = true;
-  score = 0;
-}
-}
-  if(ship.xVelocity >= width/300){
-    ship.xVelocity = width/300;
-  }
-  if(ship.xVelocity <= -width/300){
-    ship.xVelocity = -width/300;
-  }
-  if(ship.yVelocity >= width/300){
-    ship.yVelocity = width/300;
-  }
-  if(ship.yVelocity <= -width/300){
-    ship.yVelocity = -width/300;
-  }
-  if(end){
+    // Set up the game with score and background
     imageMode(CENTER);
-    image(endgame, width/2, height/2, width, height);
+    image(spacebackground, width/2, height/2, width, height);
     fill(255);
-    stroke(255);
-    text("Game Over", width/2, height/2);
-    end = false;
-    click = true;
-    click2 = true;
-    mobile = false;
+    text("Score", width/2 - width/75, height/4);
+    text(score, width/2, height/4 + height/30);
+
+    // Create all the objects
+    ship.makeShip();
+    for(let i = 0; i < bullets.length; i++){
+      bullets[i].makeBullet();
+      bullets[i].moveBullet();
+    }
+    for(let i = 0; i < pizzas.length; i++){
+    pizzas[i].makeRock();
+    pizzas[i].moveRock();
+    }
+
+    // If on mobile the onscreen controls affect the ship
+    if(mobile){
+      if(mouseIsPressed && mouseX >= width/24 - width/30 && mouseX <= width/24 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30){
+        ship.heading -= 5;
+        blue1 = false;
+      } else {
+        blue1 = true;
+      }
+      if(mouseIsPressed && mouseX >= width/6.2 - width/30 && mouseX <= width/6.2 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30){
+        ship.heading += 5;
+        blue2 = false;
+      } else {
+        blue2 = true;
+      }
+      if(mouseIsPressed && mouseX >= width/9.9 - width/30 && mouseX <= width/9.9 + width/30 && mouseY >= height - height/3.2 - width/30 && mouseY <= height - height/3.2 + width/30){
+        ship.yVelocity += ship.yacceleration;
+        ship.xVelocity += ship.xacceleration;
+        blue3 = false;
+      } else {
+        blue3 = true;
+      }
+    }
+
+    // If on computer use keyboard keys W, A, D, F, and Spacebar
+    if(mobile == false){
+      if(keyIsDown(65)){
+        ship.heading -= 5;
+      }
+      if(keyIsDown(68)){
+        ship.heading += 5;
+      }
+      if(keyIsDown(87)){
+        ship.yVelocity += ship.yacceleration;
+        ship.xVelocity += ship.xacceleration;
+      }
+    }
+
+    // Slow the ship in the positive y if either the mouse is pressed or W is down
+    if(ship.yVelocity < 0 && !mouseIsPressed && !keyIsDown(87)){
+      ship.yVelocity += abs(ship.yacceleration);
+
+      // If the y velocity is close to 0, the ship stops
+      if(ship.yVelocity < 0 && ship.yVelocity > ship.yacceleration && !mouseIsPressed){
+        ship.yVelocity = 0;
+        ship.yacceleration2 = 0;
+        ship.xVelocity = 0;
+      }
+    }
+
+    // Slow the ship in the negative y if either the mouse is pressed or W is down
+    if(ship.yVelocity > 0 && !mouseIsPressed && !keyIsDown(87)){
+      ship.yVelocity -= abs(ship.yacceleration);
+
+      // If the y velocity is close to 0, the ship stops
+      if(ship.yVelocity > 0 && ship.yVelocity < ship.yacceleration && !mouseIsPressed){
+        ship.yVelocity = 0;
+        ship.yacceleration2 = 0;
+        ship.xVelocity = 0;
+      }
+    }
+
+    // Slow the ship in the negative x if either the mouse is pressed or W is down
+    if(ship.xVelocity > 0 && !mouseIsPressed && !keyIsDown(87)){
+      ship.xVelocity -= abs(ship.xacceleration);
+
+      // If the x velocity is close to 0, the ship stops
+      if(ship.xVelocity > 0 && ship.xVelocity < ship.xacceleration && !mouseIsPressed){
+        ship.xVelocity = 0;
+        ship.xacceleration2 = 0;
+        ship.yVelocity = 0;
+      }
+    }
+
+    // Accelerate the ship in the positive x if either the mouse is pressed or W is down
+    if(ship.xVelocity < 0 && !mouseIsPressed && !keyIsDown(87)){
+      ship.xVelocity += abs(ship.xacceleration);
+
+      // If the x velocity is close to 0, the ship stops
+      if(ship.xVelocity < 0 && ship.xVelocity > ship.xacceleration && !mouseIsPressed){
+        ship.xVelocity = 0;
+        ship.xacceleration2 = 0;
+        ship.yVelocity = 0;
+      }
+    }
+
+    // The ship and pizzas/asteroids wrap around the screen
+    if(ship.x1 < -height/30){
+      ship.x1 = width;
+    }
+    if(ship.x1 > width + height/30){
+      ship.x1 = 0;
+    }
+    if(ship.y1 < -height/30){
+      ship.y1 = height;
+    }
+    if(ship.y1 > height + height/30){
+      ship.y1 = 0;
+    }
+    for(i = 0; i < pizzas.length; i++){
+      if(pizzas[i].x < -width/10){
+        pizzas[i].x = width + width/10;
+      }
+      if(pizzas[i].x > width + width/10){
+        pizzas[i].x = -width/10;
+      }
+      if(pizzas[i].y < -width/10){
+        pizzas[i].y = height + width/10;
+      }
+      if(pizzas[i].y > height + width/10){
+        pizzas[i].y = -width/10;
+      }
+    }
+
+    // Collision rule between pizzas/asteroids and bullets/blueberries
+    for(j = 0; j < pizzas.length; j++){
+      for(i = 0; i < bullets.length; i++){
+
+        // Collisions for the large and medium pizzas
+        let distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
+        if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
+          // Move opposite
+          pizzas[j].xVelocity *= -1;
+          pizzas[j].yVelocity *= -1;
+          // Add a new size pizza with half the radius of the current one and half the radius of the existing pizza
+          pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
+          pizzas[j].r = pizzas[j].r/2;
+          // Add points if hit
+          score++;
+          // Splice the bullet out
+          bullets.splice(i,1);
+          i--;
+        }
+
+        // Collisions for small pizzas
+        if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
+          // Splice out the pizza and bullet
+          pizzas.splice(j,1);
+          bullets.splice(i,1);
+          i--;
+          // Add a new large pizza at a random place offscreen
+          pizzas.push(new Rock(random(0, width), random(-height, 0), width/10));
+          // Add points if hit
+          score++;
+        }
+      }
+    }
+
+    // Collisions between ship and pizzas/asteroids
+    for(j = 0; j < pizzas.length; j++){
+      // Tip of the ship
+      let distance2 = dist(pizzas[j].x, pizzas[j].y, ship.x1, ship.y1 - width/70);
+      // Left corner of the ship
+      let distance3 = dist(pizzas[j].x, pizzas[j].y, ship.x1 - width/110, ship.y1 + width/70);
+      // Right corner of the ship
+      let distance4 = dist(pizzas[j].x, pizzas[j].y, ship.x1 + width/110, ship.y1 + width/70);
+      // Collision
+      if(distance2 <= pizzas[j].r/4 || distance3 <= pizzas[j].r/4 || distance4 <= pizzas[j].r/4){
+        // Go to end
+        end = true;
+        score = 0;
+      }
+    }
+
+    // Ship has a maximum velocity
+    if(ship.xVelocity >= width/300){
+      ship.xVelocity = width/300;
+    }
+    if(ship.xVelocity <= -width/300){
+      ship.xVelocity = -width/300;
+    }
+    if(ship.yVelocity >= width/300){
+      ship.yVelocity = width/300;
+    }
+    if(ship.yVelocity <= -width/300){
+      ship.yVelocity = -width/300;
+    }
+
+    // Endgame
+    if(end){
+      // New background
+      imageMode(CENTER);
+      image(endgame, width/2, height/2, width, height);
+      fill(255);
+      stroke(255);
+      text("Game Over", width/2, height/2);
+      // Set up for start
+      end = false;
+      click = true;
+      click2 = true;
+      mobile = false;
+    }
+
+    // The shoot portion of the control panel returns to full red color after pressed
+    red1 = true;
+
+    // The hyperspace portion of the control panel returns to full red color after pressed
+    red2 = true;
+
+    // Splice out the bullet that goes offscreen
+    for(i = 0; i < bullets.length; i++){
+      if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
+        bullets.splice(i,1);
+        i--;
+      }
+    }
   }
-red = true;
-for(i = 0; i < bullets.length; i++){
-if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
-  bullets.splice(i,1);
-  i--;
 }
-}
-}
-}
+
 
 function mousePressed(){
-console.log(mouseX);
-console.log(mouseY);
-if(mouseX >= 0 && mouseX < width/2 && click == false){
-  mobile = true;
-  click2 = false;
-}
-if(mouseX > width - width/2 && mouseX <= width && click == false){
-  mobile = false;
-  click2 = false;
-}
+  // Mobile button
+  if(mouseX >= 0 && mouseX < width/2 && click == false && click2 == true){
+    mobile = true;
+    click2 = false;
+  }
 
-if(mobile){
-  if(mouseX >= width - width/11.5 - width/30 && mouseX <= width - width/11.5 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30){
-    bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
-    red = false;
-    for(i = 0; i < bullets.length; i++){
-      bullets[i].makeBullet();
-      bullets[i].moveBullet();
+  // Computer button
+  if(mouseX > width - width/2 && mouseX <= width && click == false && click2 == true){
+    mobile = false;
+    click2 = false;
+  }
+
+  // If on mobile
+  if(mobile){
+    // The shoot button creates a new bullet and turns a darker red when pressed
+    if(mouseX >= width - width/11.5 - width/30 && mouseX <= width - width/11.5 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30){
+      bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
+      red1 = false;
+      for(i = 0; i < bullets.length; i++){
+        bullets[i].makeBullet();
+        bullets[i].moveBullet();
+      }
+    }
+
+    // The hyperspace button causes the ship to disappear and then reappear at a random position, have to wait 1 second before clicking again
+    if(mouseX >= width - width/5 - width/30 && mouseX <= width - width/5 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30 && click3 == true){
+      red2 = false;
+      ship.x1 = -width;
+      ship.y1 = -height;
+      click3 = false;
+      setTimeout(hyperspace, 1000);
     }
   }
-}
-  if(mouseX >= width/2 - width/25 && mouseX <= width/2 + width/25 && mouseY >= height/2 - height/25 && mouseY <= height/2 + height/25){
-    click = false;
-  }
 
+  // Start button
+  if(mouseX >= width/2 - width/25 && mouseX <= width/2 + width/25 && mouseY >= height/2 - height/25 && mouseY <= height/2 + height/25){
+      click = false;
+  }
 }
+
 
 function keyTyped(){
-  if(keyCode === 32){
-    bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
-    red = false;
-    for(i = 0; i < bullets.length; i++){
-      bullets[i].makeBullet();
-      bullets[i].moveBullet();
+  // When on computer
+  if(mobile == false){
+    // The Spacebar creates a new bullet
+    if(keyCode === 32){
+      bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
+      for(i = 0; i < bullets.length; i++){
+        bullets[i].makeBullet();
+        bullets[i].moveBullet();
+      }
+    }
+
+    // F key causes the ship to disappear and then reappear at a random position, have to wait 1 second before clicking again
+    if(keyIsDown(70) && click3 == true){
+      ship.x1 = -width;
+      ship.y1 = -height;
+      ship.xVelocity = 0;
+      ship.yVelocity = 0;
+      click3 = false;
+      setTimeout(hyperspace, 1000);
     }
   }
 }
 
 
+// Creates buttons for moving the ship and shooting
 function controlPanel(){
+  // Left blue button, turns the ship left
   if(blue1){
-  fill('rgba(0, 0, 255, 0.1)');
-  stroke(0);
-  ellipse(width/24, height - height/6, width/15, width/15);
-} else {
-  fill('rgba(0, 0, 100, 0.1)');
-  stroke(0);
-  ellipse(width/24, height - height/6, width/15, width/15);
-}
+    // Button is bright blue and transparent
+    fill('rgba(0, 0, 255, 0.1)');
+    stroke(0);
+    ellipse(width/24, height - height/6, width/15, width/15);
+  } else {
+    // When pressed the button turns darker
+    fill('rgba(0, 0, 100, 0.1)');
+    stroke(0);
+    ellipse(width/24, height - height/6, width/15, width/15);
+  }
+
+  // Right blue button, turns the ship right
   if(blue2){
-  fill('rgba(0, 0, 255, 0.1)');
-  stroke(0);
-  ellipse(width/6.2, height - height/6, width/15, width/15);
-} else {
-  fill('rgba(0, 0, 100, 0.1)');
-  stroke(0);
-  ellipse(width/6.2, height - height/6, width/15, width/15);
-}
-if(blue3){
-fill('rgba(0, 0, 255, 0.1)');
-stroke(0);
-ellipse(width/9.9, height - height/3.3, width/15, width/15);
-} else {
-fill('rgba(0, 0, 100, 0.1)');
-stroke(0);
-ellipse(width/9.9, height - height/3.3, width/15, width/15);
-}
-if(red){
-  fill('rgba(255, 0, 0, 0.1)');
-  stroke(0);
-  ellipse(width - width/11.5, height - height/6, width/15, width/15);
-} else {
-  fill('rgba(100, 0, 0, 0.1)');
-  stroke(0);
-  ellipse(width - width/11.5, height - height/6, width/15, width/15);
-}
+    // Button is bright blue and transparent
+    fill('rgba(0, 0, 255, 0.1)');
+    stroke(0);
+    ellipse(width/6.2, height - height/6, width/15, width/15);
+  } else {
+    // When pressed the button turns darker
+    fill('rgba(0, 0, 100, 0.1)');
+    stroke(0);
+    ellipse(width/6.2, height - height/6, width/15, width/15);
+  }
+
+  // Middle blue button, moves the ship forward
+  if(blue3){
+    // Button is bright blue and transparent
+    fill('rgba(0, 0, 255, 0.1)');
+    stroke(0);
+    ellipse(width/9.9, height - height/3.3, width/15, width/15);
+  } else {
+    // When pressed the button turns darker
+    fill('rgba(0, 0, 100, 0.1)');
+    stroke(0);
+    ellipse(width/9.9, height - height/3.3, width/15, width/15);
+  }
+
+  // Right red button, shoots a bullet/blueberry
+  if(red1){
+    // Button is bright red and transparent
+    fill('rgba(255, 0, 0, 0.1)');
+    stroke(0);
+    ellipse(width - width/11.5, height - height/6, width/15, width/15);
+  } else {
+    // When pressed the button turns darker
+    fill('rgba(100, 0, 0, 0.1)');
+    stroke(0);
+    ellipse(width - width/11.5, height - height/6, width/15, width/15);
+  }
+
+  // Right red button, jumps ship around screen
+  if(red2){
+    // Button is bright red and transparent
+    fill('rgba(255, 0, 0, 0.1)');
+    stroke(0);
+    ellipse(width - width/5, height - height/6, width/15, width/15);
+  } else {
+    // When pressed the button turns darker
+    fill('rgba(100, 0, 0, 0.1)');
+    stroke(0);
+    ellipse(width - width/5, height - height/6, width/15, width/15);
+  }
 }
 
+
+// Sets the game up
 function start(){
+  // First/starting background
   imageMode(CENTER);
   image(gamebackground, width/2, height/2, width, height);
   fill(255);
   text("Master of Pie", width/2 - width/20, height/4);
   text("Start", width/2 - width/75, height/2);
+  // Pizzas array is cleared
   pizzas = [];
+  // Creates the ship
   ship = new Spacecraft();
-  let r = width/10;
+  // Creates 10 pizzas/asteroids at random places offscreen
   for(let i = 0; i < 10; i++){
-  pizzas[i] = new Rock(random(0, width), random(-height, 0), r);
-}
+    pizzas[i] = new Rock(random(0, width), random(-height, 0), width/10);
+  }
+  // Reset variable
+  click3 = true;
 }
 
+
+// Gives directions of what to do if on mobile or computer
 function instructions(){
+  // Second/ingame background
   imageMode(CENTER);
-  image(gamebackground, width/2, height/2, width, height);
+  image(spacebackground, width/2, height/2, width, height);
   fill(255);
-  text("If you are playing on mobile tap on the left side of the screen and use the onscreen controls to play.", width/4, height/4);
+  // Directions
+  text("Use Onscreen Controls", width/6, height/4);
   text("Mobile", width/4, height/2);
-  text("If you are playing on a computer click on the right side of the screen and use the W A D and Spacebar keys to play.", width - width/4, height/4);
+  text("Use W A D F and Spacebar Keys", width - width/3.5, height/4);
   text("Computer", width - width/4, height/2);
 }
 
+
+// Delay between end and start
 function sleep(milliseconds) {
-  // Delay for when you die so you can see how you die
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
     if ((new Date().getTime() - start) > milliseconds){
       break;
     }
   }
+}
+
+
+// Makes the ship jump across the screen
+function hyperspace(){
+  ship.x1 = random(0, width);
+  ship.y1 = random(0, height);
+  ship.makeShip();
+  click3 = true;
 }
