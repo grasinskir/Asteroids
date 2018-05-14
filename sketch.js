@@ -596,7 +596,7 @@ function instructions(){
   // Directions
   text("Use Onscreen Controls", width/6, height/4);
   text("Mobile", width/4, height/2);
-  text("Use W A D F and Spacebar Keys", width - width/3.5, height/4);
+  text("Use W A D F and Spacebar Keys", width - width/3, height/4);
   text("Computer", width - width/4, height/2);
 }
 
