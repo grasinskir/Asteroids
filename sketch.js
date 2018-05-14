@@ -10,6 +10,7 @@ let pizza;
 // Bullet variables
 let bullets = [];
 let shoot;
+let reload = 10;
 
 // Start, end, and score variables
 let end = false;
@@ -82,7 +83,9 @@ class Spacecraft{
     // If one mobile game displays control panel
     if(mobile){
     controlPanel();
-  }
+    }
+    // Display bullet bullet
+    bulletCount();
   }
 
   jumpShip(){
@@ -111,6 +114,8 @@ class Rock{
       if(mobile){
       controlPanel();
     }
+    // Display bullet bullet
+    bulletCount();
   }
 
   // Move the pizza at a constant, random velocity
@@ -121,6 +126,8 @@ class Rock{
       if(mobile){
       controlPanel();
     }
+    // Display bullet bullet
+    bulletCount();
   }
 }
 
@@ -143,6 +150,8 @@ class Projectile{
       if(mobile){
       controlPanel();
     }
+    // Display bullet bullet
+    bulletCount();
   }
 
   // Move the bullet/blueberry
@@ -153,6 +162,8 @@ class Projectile{
       if(mobile){
       controlPanel();
     }
+    // Display bullet bullet
+    bulletCount();
   }
 }
 
@@ -414,17 +425,25 @@ function mousePressed(){
     mobile = false;
     click2 = false;
   }
-
-  // If on mobile
-  if(mobile){
-    // The shoot button creates a new bullet and turns a darker red when pressed
-    if(mouseX >= width - width/11.5 - width/30 && mouseX <= width - width/11.5 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30){
-      bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
-      red1 = false;
-      for(i = 0; i < bullets.length; i++){
-        bullets[i].makeBullet();
-        bullets[i].moveBullet();
+  // Make sure people don't break game by setting a limit on bullets
+  if(reload > 0){
+    // If on mobile
+    if(mobile){
+      // The shoot button creates a new bullet and turns a darker red when pressed
+      if(mouseX >= width - width/11.5 - width/30 && mouseX <= width - width/11.5 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30){
+        bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
+        red1 = false;
+        for(i = 0; i < bullets.length; i++){
+          bullets[i].makeBullet();
+          bullets[i].moveBullet();
+        }
+        reload--;
       }
+    }
+
+    // If bullets are at 0 have to wait 2 seconds to reload
+    if(reload <= 0){
+      setTimeout(reloadMechanics, 2000);
     }
 
     // The hyperspace button causes the ship to disappear and then reappear at a random position, have to wait 1 second before clicking again
@@ -445,26 +464,35 @@ function mousePressed(){
 
 
 function keyTyped(){
-  // When on computer
-  if(mobile == false){
-    // The Spacebar creates a new bullet
-    if(keyCode === 32){
-      bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
-      for(i = 0; i < bullets.length; i++){
-        bullets[i].makeBullet();
-        bullets[i].moveBullet();
+  // Make sure people don't break game by setting a limit on bullets
+  if(reload > 0){
+    // When on computer
+    if(mobile == false){
+      // The Spacebar creates a new bullet
+      if(keyCode === 32){
+        bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
+        for(i = 0; i < bullets.length; i++){
+          bullets[i].makeBullet();
+          bullets[i].moveBullet();
+        }
+        reload--;
       }
     }
+  }
 
-    // F key causes the ship to disappear and then reappear at a random position, have to wait 1 second before clicking again
-    if(keyIsDown(70) && click3 == true){
-      ship.x1 = -width;
-      ship.y1 = -height;
-      ship.xVelocity = 0;
-      ship.yVelocity = 0;
-      click3 = false;
-      setTimeout(hyperspace, 1000);
-    }
+  // If bullets are at 0 have to wait 2 seconds to reload
+  if(reload <= 0){
+    setTimeout(reloadMechanics, 2000);
+  }
+
+  // F key causes the ship to disappear and then reappear at a random position, have to wait 1 second before clicking again
+  if(keyIsDown(70) && click3 == true){
+    ship.x1 = -width;
+    ship.y1 = -height;
+    ship.xVelocity = 0;
+    ship.yVelocity = 0;
+    click3 = false;
+    setTimeout(hyperspace, 1000);
   }
 }
 
@@ -590,4 +618,23 @@ function hyperspace(){
   ship.y1 = random(0, height);
   ship.makeShip();
   click3 = true;
+}
+
+
+// Resets bullet count for reloading
+function reloadMechanics(){
+  reload = 10;
+}
+
+
+// Draws the number of bullets at the bottom of the screen
+function bulletCount(){
+  let xPos = width - width/25;
+  let yPos = height - height/25;
+  for(let i = 0; i < reload; i++){
+    fill('rgba(0, 0, 255, 0.1)');
+    noStroke();
+    ellipse(xPos, yPos, width/100, width/100);
+    xPos -= width/50;
+  }
 }
