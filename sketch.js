@@ -13,6 +13,8 @@ let bullets = [];
 let shoot;
 let reload = 10;
 let hit = false;
+let splice1 = false;
+let splice2 = false;
 
 // Start, end, and score variables
 let end = false;
@@ -172,7 +174,7 @@ class Projectile{
 function setup() {
   // Create the canvas and set a text size
   createCanvas(windowWidth, windowHeight);
-  textSize(30);
+  textSize(15);
 }
 
 function draw() {
@@ -326,6 +328,10 @@ function draw() {
         // Collisions for the large and medium pizzas
         let distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
         if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
+          // Splice the bullet out
+          bullets.splice(i,1);
+          i--;
+          splice1 = true;
           // Move opposite
           pizzas[j].xVelocity *= -1;
           pizzas[j].yVelocity *= -1;
@@ -334,19 +340,18 @@ function draw() {
           pizzas[j].r = pizzas[j].r/2;
           // Add points if hit
           score++;
-          // Splice the bullet out
-          bullets.splice(i,1);
-          i--;
+        } else {
+          splice1 = false;
         }
 
         // Collisions for small pizzas
-        if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
+        if(distance1 < pizzas[j].r/2 && pizzas[j].r <= width/40){
           // Splice out the pizza and bullet
           pizzas.splice(j,1);
           bullets.splice(i,1);
           i--;
           // Add a new large pizza at a random place offscreen
-          pizzas.push(new Rock(random(0, width), random(-height, 0), width/10));
+          // pizzas.push(new Rock(random(0, width), random(-height, 0), width/10));
           // Add points if hit
           score++;
           // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
@@ -364,7 +369,7 @@ function draw() {
       // Right corner of the ship
       let distance4 = dist(pizzas[j].x, pizzas[j].y, ship.x1 + width/110, ship.y1 + width/70);
       // Collision
-      if(distance2 <= pizzas[j].r/4 || distance3 <= pizzas[j].r/4 || distance4 <= pizzas[j].r/4){
+      if(distance2 < pizzas[j].r/4 || distance3 < pizzas[j].r/4 || distance4 < pizzas[j].r/4){
         // Go to end
         end = true;
         score = 0;
@@ -410,6 +415,7 @@ function draw() {
       mobile = false;
       hit = false;
       crash = false;
+      splice1 = false;
     }
 
     // The shoot portion of the control panel returns to full red color after pressed
@@ -421,8 +427,10 @@ function draw() {
     // Splice out the bullet that goes offscreen
     for(i = 0; i < bullets.length; i++){
       if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
-        bullets.splice(i,1);
-        i--;
+        if(splice1 == false){
+          bullets.splice(i,1);
+          i--;
+        }
       }
     }
   }
@@ -595,12 +603,13 @@ function start(){
   // Creates the ship
   ship = new Spacecraft();
   // Creates 10 pizzas/asteroids at random places offscreen
-  for(let i = 0; i < 10; i++){
+  for(let i = 0; i < 5; i++){
     pizzas[i] = new Rock(random(0, width), random(-height, 0), width/10);
   }
   // Reset variables
   click3 = true;
   reload = 10;
+  splice1 = false;
 }
 
 
