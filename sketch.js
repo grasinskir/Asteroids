@@ -351,6 +351,8 @@ function draw() {
           score++;
           // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
           hit = true;
+        } else {
+          hit = false;
         }
       }
     }
@@ -370,6 +372,8 @@ function draw() {
         score = 0;
         // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
         crash = true;
+      } else {
+        crash = false;
       }
     }
 
