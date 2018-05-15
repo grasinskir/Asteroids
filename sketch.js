@@ -597,6 +597,8 @@ function start(){
   // Reset variables
   click3 = true;
   reload = 10;
+  crash = false;
+  hit = false;
 }
 
 
