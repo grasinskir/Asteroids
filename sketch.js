@@ -381,6 +381,8 @@ function draw() {
     if(hit && crash){
       end = true;
       score = 0;
+      hit = false;
+      crash = false;
     }
 
     // Ship has a maximum velocity
