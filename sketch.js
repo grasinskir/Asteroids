@@ -351,8 +351,6 @@ function draw() {
           score++;
           // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
           hit = true;
-        } else {
-          hit = false;
         }
       }
     }
@@ -372,8 +370,6 @@ function draw() {
         score = 0;
         // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
         crash = true;
-      } else {
-        crash = false;
       }
     }
 
@@ -412,6 +408,8 @@ function draw() {
       click = true;
       click2 = true;
       mobile = false;
+      hit = false;
+      crash = false;
     }
 
     // The shoot portion of the control panel returns to full red color after pressed
@@ -603,8 +601,6 @@ function start(){
   // Reset variables
   click3 = true;
   reload = 10;
-  crash = false;
-  hit = false;
 }
 
 
