@@ -2,6 +2,7 @@
 let ship;
 let moveForward;
 let pie;
+let crash = false;
 
 // Pizza variables
 let pizzas = [];
@@ -11,6 +12,7 @@ let pizza;
 let bullets = [];
 let shoot;
 let reload = 10;
+let hit = false;
 
 // Start, end, and score variables
 let end = false;
@@ -347,6 +349,8 @@ function draw() {
           pizzas.push(new Rock(random(0, width), random(-height, 0), width/10));
           // Add points if hit
           score++;
+          // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
+          hit = true;
         }
       }
     }
@@ -364,7 +368,15 @@ function draw() {
         // Go to end
         end = true;
         score = 0;
+        // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
+        crash = true;
       }
+    }
+
+    // Make sure game doesn't break when both the ship and bullet hit a pizza at the same time
+    if(hit && crash){
+      end = true;
+      score = 0;
     }
 
     // Ship has a maximum velocity
@@ -582,8 +594,9 @@ function start(){
   for(let i = 0; i < 10; i++){
     pizzas[i] = new Rock(random(0, width), random(-height, 0), width/10);
   }
-  // Reset variable
+  // Reset variables
   click3 = true;
+  reload = 10;
 }
 
 
