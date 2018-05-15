@@ -378,7 +378,7 @@ function draw() {
     }
 
     // Make sure game doesn't break when both the ship and bullet hit a pizza at the same time
-    if(hit && crash){
+    if(hit == true && crash == true){
       end = true;
       score = 0;
       hit = false;
