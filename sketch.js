@@ -23,6 +23,8 @@ let score = 0;
 let click = true;
 let click2 = true;
 let click3 = true;
+let level = 1;
+let next = false;
 
 // Control panel variables
 let red1 = true;
@@ -172,7 +174,7 @@ class Projectile{
 function setup() {
   // Create the canvas and set a text size
   createCanvas(windowWidth, windowHeight);
-  textSize(30);
+  textSize(15);
 }
 
 function draw() {
@@ -346,11 +348,21 @@ function draw() {
           bullets.splice(i,1);
           i--;
           // Add a new large pizza at a random place offscreen
-          pizzas.push(new Rock(random(0, width), random(-height, 0), width/10));
+          // pizzas.push(new Rock(random(0, width), random(-height, 0), width/10));
           // Add points if hit
           score++;
           // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
           hit = true;
+        }
+
+        if(pizzas.length < 1){
+          level++;
+          next = true;
+          // levelCount();
+          // nextLevel();
+        }
+        if(next){
+          levelCount();
         }
       }
     }
@@ -595,7 +607,7 @@ function start(){
   // Creates the ship
   ship = new Spacecraft();
   // Creates 10 pizzas/asteroids at random places offscreen
-  for(let i = 0; i < 10; i++){
+  for(let i = 0; i < 1; i++){
     pizzas[i] = new Rock(random(0, width), random(-height, 0), width/10);
   }
   // Reset variables
@@ -653,5 +665,21 @@ function bulletCount(){
     noStroke();
     ellipse(xPos, yPos, width/100, width/100);
     xPos -= width/50;
+  }
+}
+
+
+function levelCount(){
+  imageMode(CENTER);
+  image(spacebackground, width/2, height/2, width, height);
+  fill(255);
+  text("Level", width/2 - width/20, height/4);
+  text(level, width/2 - width/75, height/2);
+}
+
+
+function nextLevel(){
+  for(let i = 0; i < 1; i++){
+    pizzas[i] = new Rock(random(0, width), random(-height, 0), width/10);
   }
 }
