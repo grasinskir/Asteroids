@@ -105,8 +105,8 @@ class Rock{
     this.x = x;
     this.y = y;
     this.r = r;
-    this.xVelocity = random(-width/500, width/500);
-    this.yVelocity = random(-height/500, height/500);
+    this.xVelocity = random(-width/500, width/500)*level;
+    this.yVelocity = random(-height/500, height/500)*level;
   }
 
   // Make the pizza
@@ -198,7 +198,7 @@ function draw() {
     fill(255);
     text("Score", width/2 - width/75, height/4);
     text(score, width/2, height/4 + height/30);
-
+    levelCount();
     // Create all the objects
     ship.makeShip();
     for(let i = 0; i < bullets.length; i++){
@@ -360,14 +360,8 @@ function draw() {
       }
     }
     if(pizzas.length < 1){
-      next = true;
-      level++;
-      setTimeout(levelCount(), 3000);
-    }
-    if(next){
       nextLevel();
-
-    }
+     }
 
 
 
@@ -677,22 +671,22 @@ function bulletCount(){
 
 
 function levelCount(){
-  imageMode(CENTER);
-  image(spacebackground, width/2, height/2, width, height);
-  fill(255);
+
+
+
+
+  
   text("Level", width/2 - width/20, height/4);
   text(level, width/2 - width/75, height/2);
-  next = true;
+
+
 }
 
 
 function nextLevel(){
-  for(let i = 0; i < 1; i++){
+  for(let i = 0; i < 5; i++){
     pizzas[i] = new Rock(random(0, width), random(-height, 0), width/10);
   }
-  next = false;
-}
+  level++;
 
-function moveOn(){
-  next = true;
 }
