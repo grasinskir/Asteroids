@@ -25,6 +25,7 @@ let click2 = true;
 let click3 = true;
 let level = 1;
 let next = false;
+let levelup = false;
 
 // Control panel variables
 let red1 = true;
@@ -189,6 +190,7 @@ function draw() {
 
     // Game screen
   } else if(click2 == false && click == false) {
+
 
     // Set up the game with score and background
     imageMode(CENTER);
@@ -358,15 +360,17 @@ function draw() {
       }
     }
     if(pizzas.length < 1){
+      next = true;
       level++;
-      levelCount();
-
-
-      if(next){
-
+      setTimeout(levelCount(), 3000);
+    }
+    if(next){
       nextLevel();
+
     }
-    }
+
+
+
 
 
 
