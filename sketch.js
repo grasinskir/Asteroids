@@ -7,6 +7,7 @@ let crash = false;
 // Pizza variables
 let pizzas = [];
 let pizza;
+let pizzaorder = 1;
 
 // Bullet variables
 let bullets = [];
@@ -331,32 +332,29 @@ function draw() {
         let distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
         if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
           // Move opposite
-          // pizzas[j].xVelocity *= -1;
-          // pizzas[j].yVelocity *= -1;
-          // // Add a new size pizza with half the radius of the current one and half the radius of the existing pizza
-          // pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
-          // pizzas[j].r = pizzas[j].r/2;
-          // // Add points if hit
-          // score++;
+          pizzas[j].xVelocity *= -1;
+          pizzas[j].yVelocity *= -1;
+          // Add a new size pizza with half the radius of the current one and half the radius of the existing pizza
+          pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
+          pizzas[j].r = pizzas[j].r/2;
+          // Add points if hit
+          score++;
           // Splice the bullet out
           bullets.splice(i,1);
           i--;
-          pizzas.splice(j,1);
         }
 
         // Collisions for small pizzas
-        // if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
-        //   // Splice out the pizza and bullet
-        //   pizzas.splice(j,1);
-        //   bullets.splice(i,1);
-        //   i--;
-        //   // Add a new large pizza at a random place offscreen
-        //   // pizzas.push(new Rock(random(0, width), random(-height, 0), width/10));
-        //   // Add points if hit
-        //   score++;
-        //   // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
-        //   hit = true;
-        // }
+        if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
+          // Splice out the pizza and bullet
+          pizzas.splice(j,1);
+          bullets.splice(i,1);
+          i--;
+          // Add points if hit
+          score++;
+          // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
+          hit = true;
+        }
       }
     }
     if(pizzas.length < 1){
@@ -608,7 +606,7 @@ function start(){
   // Creates the ship
   ship = new Spacecraft();
   // Creates 10 pizzas/asteroids at random places offscreen
-  for(let i = 0; i < 1; i++){
+  for(let i = 0; i < pizzaorder; i++){
     pizzas[i] = new Rock(random(0, width), random(-height, 0), width/10);
   }
   // Reset variables
@@ -671,22 +669,19 @@ function bulletCount(){
 
 
 function levelCount(){
-
-
-
-
-  
-  text("Level", width/2 - width/20, height/4);
-  text(level, width/2 - width/75, height/2);
-
-
+  text("Level", width/2, height - height/4);
+  text(level, width/2, height - height/4 + height/25);
 }
 
 
 function nextLevel(){
-  for(let i = 0; i < 5; i++){
-    pizzas[i] = new Rock(random(0, width), random(-height, 0), width/10);
+  pizzaorder++;
+  if(pizzaorder >= 5){
+    pizzaorder = 5;
   }
   level++;
+  for(let i = 0; i < pizzaorder; i++){
+    pizzas[i] = new Rock(random(0, width), random(-height, 0), width/10);
+  }
 
 }
