@@ -3,6 +3,7 @@ let ship;
 let moveForward;
 let pie;
 let crash = false;
+let hyper = false;
 
 // Pizza variables
 let pizzas = [];
@@ -297,16 +298,16 @@ function draw() {
     }
 
     // The ship and pizzas/asteroids wrap around the screen
-    if(ship.x1 < -height/30){
+    if(ship.x1 < -height/30 && hyper == false){
       ship.x1 = width;
     }
-    if(ship.x1 > width + height/30){
+    if(ship.x1 > width + height/30 && hyper == false){
       ship.x1 = 0;
     }
-    if(ship.y1 < -height/30){
+    if(ship.y1 < -height/30 && hyper == false){
       ship.y1 = height;
     }
-    if(ship.y1 > height + height/30){
+    if(ship.y1 > height + height/30 && hyper == false){
       ship.y1 = 0;
     }
     for(i = 0; i < pizzas.length; i++){
@@ -476,6 +477,7 @@ function mousePressed(){
     // The hyperspace button causes the ship to disappear and then reappear at a random position, have to wait 1 second before clicking again
     if(mouseX >= width - width/5 - width/30 && mouseX <= width - width/5 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30 && click3 == true){
       red2 = false;
+      hyper = true;
       ship.x1 = -width;
       ship.y1 = -height;
       click3 = false;
@@ -514,6 +516,7 @@ function keyTyped(){
 
   // F key causes the ship to disappear and then reappear at a random position, have to wait 1 second before clicking again
   if(keyIsDown(70) && click3 == true){
+    hyper = true;
     ship.x1 = -width;
     ship.y1 = -height;
     ship.xVelocity = 0;
@@ -646,6 +649,7 @@ function hyperspace(){
   ship.y1 = random(0, height);
   ship.makeShip();
   click3 = true;
+  hyper = false;
 }
 
 
