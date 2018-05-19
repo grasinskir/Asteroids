@@ -95,6 +95,7 @@ class Spacecraft{
     bulletCount();
   }
 
+  // Make ship move offscreen while traveling in hyperspace
   jumpShip(){
     imageMode(CENTER)
     image(pie, 0, 0, 0, 0);
@@ -192,7 +193,6 @@ function draw() {
 
     // Game screen
   } else if(click2 == false && click == false) {
-
 
     // Set up the game with score and background
     imageMode(CENTER);
@@ -358,14 +358,11 @@ function draw() {
         }
       }
     }
+
+    // If on the last pizza begin next level
     if(pizzas.length < 1){
       nextLevel();
-     }
-
-
-
-
-
+    }
 
     // Collisions between ship and pizzas/asteroids
     for(j = 0; j < pizzas.length; j++){
@@ -608,7 +605,7 @@ function start(){
   pizzas = [];
   // Creates the ship
   ship = new Spacecraft();
-  // Creates 10 pizzas/asteroids at random places offscreen
+  // Creates pizzas/asteroids at random places offscreen
   for(let i = 0; i < pizzaorder; i++){
     pizzas[i] = new Rock(random(0, width), random(-height, 0), width/10);
   }
@@ -672,12 +669,14 @@ function bulletCount(){
 }
 
 
+// Shows the level onscreen
 function levelCount(){
   text("Level", width/2, height - height/4);
   text(level, width/2, height - height/4 + height/25);
 }
 
 
+// Increases the level and number of pizzas (up to 5)
 function nextLevel(){
   pizzaorder++;
   if(pizzaorder >= 5){
@@ -687,5 +686,4 @@ function nextLevel(){
   for(let i = 0; i < pizzaorder; i++){
     pizzas[i] = new Rock(random(0, width), random(-height, 0), width/10);
   }
-
 }
