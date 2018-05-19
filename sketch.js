@@ -194,13 +194,14 @@ function draw() {
     // Game screen
   } else if(click2 == false && click == false) {
 
-    // Set up the game with score and background
+    // Set up the game with score, background, and level
     imageMode(CENTER);
     image(spacebackground, width/2, height/2, width, height);
     fill(255);
     text("Score", width/2 - width/75, height/4);
     text(score, width/2, height/4 + height/30);
     levelCount();
+
     // Create all the objects
     ship.makeShip();
     for(let i = 0; i < bullets.length; i++){
@@ -455,7 +456,7 @@ function mousePressed(){
     // If on mobile
     if(mobile){
       // The shoot button creates a new bullet and turns a darker red when pressed
-      if(mouseX >= width - width/11.5 - width/30 && mouseX <= width - width/11.5 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30){
+      if(mouseX >= width - width/11.5 - width/30 && mouseX <= width - width/11.5 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30 && click == false && click2 == false){
         bullets.push(new Projectile(ship.x1, ship.y1, ship.heading));
         red1 = false;
         for(i = 0; i < bullets.length; i++){
@@ -472,7 +473,7 @@ function mousePressed(){
     }
 
     // The hyperspace button causes the ship to disappear and then reappear at a random position, have to wait 1 second before clicking again
-    if(mouseX >= width - width/5 - width/30 && mouseX <= width - width/5 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30 && click3 == true){
+    if(mouseX >= width - width/5 - width/30 && mouseX <= width - width/5 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30 && click3 && click == false && click2 == false){
       red2 = false;
       hyper = true;
       ship.x1 = -width;
@@ -483,7 +484,7 @@ function mousePressed(){
   }
 
   // Start button
-  if(mouseX >= width/2 - width/25 && mouseX <= width/2 + width/25 && mouseY >= height/2 - height/25 && mouseY <= height/2 + height/25){
+  if(mouseX >= width/2 - width/25 && mouseX <= width/2 + width/25 && mouseY >= height/2 - height/25 && mouseY <= height/2 + height/25 && click && click2){
       click = false;
   }
 }
@@ -671,6 +672,7 @@ function bulletCount(){
 
 // Shows the level onscreen
 function levelCount(){
+  fill(255);
   text("Level", width/2, height - height/4);
   text(level, width/2, height - height/4 + height/25);
 }
