@@ -15,6 +15,7 @@ let bullets = [];
 let shoot;
 let reload = 10;
 let hit = false;
+let offscreen = false;
 
 // Start, end, and score variables
 let end = false;
@@ -344,6 +345,7 @@ function draw() {
           // Splice the bullet out
           bullets.splice(i,1);
           i--;
+          hit = true;
         }
 
         // Collisions for small pizzas
@@ -383,12 +385,49 @@ function draw() {
       }
     }
 
+    // Splice out the bullet that goes offscreen
+    for(i = 0; i < bullets.length; i++){
+      if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
+        bullets.splice(i,1);
+        i--;
+        offscreen = true;
+      }
+    }
+
     // Make sure game doesn't break when both the ship and bullet hit a pizza at the same time
     if(hit == true && crash == true){
       end = true;
       score = 0;
       hit = false;
       crash = false;
+    }
+
+    if(hit == true && offscreen == true && pizzas.legnth >= 1){
+      // Move opposite
+      pizzas[j].xVelocity *= -1;
+      pizzas[j].yVelocity *= -1;
+      // Add a new size pizza with half the radius of the current one and half the radius of the existing pizza
+      pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
+      pizzas[j].r = pizzas[j].r/2;
+      // Add points if hit
+      score++;
+      // Splice the bullet out
+      bullets.splice(i,1);
+      i--;
+      hit = false;
+      offscreen = false;
+    }
+
+    if(hit == true && offscreen == true && pizzas.length < 1){
+      // Splice out the pizza and bullet
+      pizzas.splice(j,1);
+      bullets.splice(i,1);
+      i--;
+      // Add points if hit
+      score++;
+      // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
+      hit = false;
+      offscreen = false;
     }
 
     // Ship has a maximum velocity
@@ -428,14 +467,6 @@ function draw() {
 
     // The hyperspace portion of the control panel returns to full red color after pressed
     red2 = true;
-
-    // Splice out the bullet that goes offscreen
-    for(i = 0; i < bullets.length; i++){
-      if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
-        bullets.splice(i,1);
-        i--;
-      }
-    }
   }
 }
 
