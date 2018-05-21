@@ -389,7 +389,7 @@ function draw() {
     for(i = 0; i < bullets.length; i++){
       if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
         bullets.splice(i,1);
-        i--;
+
         offscreen = true;
       }
     }
@@ -460,6 +460,7 @@ function draw() {
       hit = false;
       crash = false;
       level = 0;
+      bullets = [];
     }
 
     // The shoot portion of the control panel returns to full red color after pressed
