@@ -344,7 +344,7 @@ function draw() {
           score++;
           // Splice the bullet out
           bullets.splice(i,1);
-          i--;
+          // i--;
           hit = true;
         }
 
@@ -353,7 +353,7 @@ function draw() {
           // Splice out the pizza and bullet
           pizzas.splice(j,1);
           bullets.splice(i,1);
-          i--;
+          // i--;
           // Add points if hit
           score++;
           // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
@@ -389,7 +389,7 @@ function draw() {
     for(i = 0; i < bullets.length; i++){
       if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
         bullets.splice(i,1);
-
+        // i--;
         offscreen = true;
       }
     }
