@@ -386,12 +386,12 @@ function draw() {
     }
 
     // Splice out the bullet that goes offscreen
-    for(i = 0; i < bullets.length; i++){
-      if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
-        bullets.splice(i,1);
-        // i--;
-        offscreen = true;
-      }
+    // for(i = 0; i < bullets.length; i++){
+    //   if(bullets[i].x > width || bullets[i].x < 0 || bullets[i].y > height || bullets[i].y < 0){
+    //     bullets.splice(i,1);
+    //     // i--;
+    //     offscreen = true;
+    //   }
     }
 
     // Make sure game doesn't break when both the ship and bullet hit a pizza at the same time
