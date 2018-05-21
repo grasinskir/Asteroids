@@ -333,7 +333,7 @@ function draw() {
 
         // Collisions for the large and medium pizzas
         let distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
-        if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/24){
+        if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/20){
           // Move opposite
           pizzas[j].xVelocity *= -1;
           pizzas[j].yVelocity *= -1;
@@ -346,20 +346,19 @@ function draw() {
           bullets.splice(i,1);
           i--;
           hit = true;
-          // Collisions for small pizzas
-          if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/24){
-            // Splice out the pizza and bullet
-            pizzas.splice(j,1);
-            bullets.splice(i,1);
-            i--;
-            // Add points if hit
-            score++;
-            // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
-            hit = true;
-          }
         }
 
-
+        // Collisions for small pizzas
+        if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/20){
+          // Splice out the pizza and bullet
+          pizzas.splice(j,1);
+          bullets.splice(i,1);
+          i--;
+          // Add points if hit
+          score++;
+          // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
+          hit = true;
+        }
       }
     }
 
@@ -642,7 +641,7 @@ function start(){
   ship = new Spacecraft();
   // Creates pizzas/asteroids at random places offscreen
   for(let i = 0; i < pizzaorder; i++){
-    pizzas[i] = new Rock(random(0, width), random(-height, 0), width/6);
+    pizzas[i] = new Rock(random(0, width), random(0, height), width/5);
   }
   // Reset variables
   click3 = true;
@@ -720,6 +719,6 @@ function nextLevel(){
   }
   level++;
   for(let i = 0; i < pizzaorder; i++){
-    pizzas[i] = new Rock(random(0, width), random(-height, 0), width/6);
+    pizzas[i] = new Rock(random(0, width), random(-height, 0), width/5);
   }
 }
