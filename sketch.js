@@ -420,6 +420,7 @@ function draw() {
       mobile = false;
       hit = false;
       crash = false;
+      level = 0;
     }
 
     // The shoot portion of the control panel returns to full red color after pressed
