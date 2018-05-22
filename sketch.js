@@ -563,12 +563,12 @@ function controlPanel(){
   // Left blue button, turns the ship left
   if(blue1){
     // Button is bright blue and transparent
-    fill('rgba(0, 0, 255, 0.1)');
+    fill('rgba(0, 0, 255, 0.5)');
     stroke(0);
     ellipse(width/24, height - height/6, width/15, width/15);
   } else {
     // When pressed the button turns darker
-    fill('rgba(0, 0, 100, 0.1)');
+    fill('rgba(0, 0, 100, 0.5)');
     stroke(0);
     ellipse(width/24, height - height/6, width/15, width/15);
   }
@@ -576,12 +576,12 @@ function controlPanel(){
   // Right blue button, turns the ship right
   if(blue2){
     // Button is bright blue and transparent
-    fill('rgba(0, 0, 255, 0.1)');
+    fill('rgba(0, 0, 255, 0.5)');
     stroke(0);
     ellipse(width/6.2, height - height/6, width/15, width/15);
   } else {
     // When pressed the button turns darker
-    fill('rgba(0, 0, 100, 0.1)');
+    fill('rgba(0, 0, 100, 0.5)');
     stroke(0);
     ellipse(width/6.2, height - height/6, width/15, width/15);
   }
@@ -589,12 +589,12 @@ function controlPanel(){
   // Middle blue button, moves the ship forward
   if(blue3){
     // Button is bright blue and transparent
-    fill('rgba(0, 0, 255, 0.1)');
+    fill('rgba(0, 0, 255, 0.5)');
     stroke(0);
     ellipse(width/9.9, height - height/3.3, width/15, width/15);
   } else {
     // When pressed the button turns darker
-    fill('rgba(0, 0, 100, 0.1)');
+    fill('rgba(0, 0, 100, 0.5)');
     stroke(0);
     ellipse(width/9.9, height - height/3.3, width/15, width/15);
   }
@@ -602,12 +602,12 @@ function controlPanel(){
   // Right red button, shoots a bullet/blueberry
   if(red1){
     // Button is bright red and transparent
-    fill('rgba(255, 0, 0, 0.1)');
+    fill('rgba(255, 0, 0, 0.5)');
     stroke(0);
     ellipse(width - width/11.5, height - height/6, width/15, width/15);
   } else {
     // When pressed the button turns darker
-    fill('rgba(100, 0, 0, 0.1)');
+    fill('rgba(100, 0, 0, 0.5)');
     stroke(0);
     ellipse(width - width/11.5, height - height/6, width/15, width/15);
   }
@@ -615,12 +615,12 @@ function controlPanel(){
   // Right red button, jumps ship around screen
   if(red2){
     // Button is bright red and transparent
-    fill('rgba(255, 0, 0, 0.1)');
+    fill('rgba(255, 0, 0, 0.5)');
     stroke(0);
     ellipse(width - width/5, height - height/6, width/15, width/15);
   } else {
     // When pressed the button turns darker
-    fill('rgba(100, 0, 0, 0.1)');
+    fill('rgba(100, 0, 0, 0.5)');
     stroke(0);
     ellipse(width - width/5, height - height/6, width/15, width/15);
   }
@@ -695,7 +695,7 @@ function bulletCount(){
   let xPos = width - width/25;
   let yPos = height - height/25;
   for(let i = 0; i < reload; i++){
-    fill('rgba(0, 0, 255, 0.1)');
+    fill('rgba(0, 0, 255, 0.5)');
     noStroke();
     ellipse(xPos, yPos, width/100, width/100);
     xPos -= width/50;
