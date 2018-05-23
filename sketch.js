@@ -9,6 +9,8 @@ let hyper = false;
 let pizzas = [];
 let pizzas2 = [];
 let pizzas3 = [];
+let pizzas4 = [];
+let pizzas5 = [];
 let pizza;
 let pizzaorder = 1;
 
@@ -223,6 +225,14 @@ function draw() {
       pizzas3[i].makeRock();
       pizzas3[i].moveRock();
     }
+    for(let i = 0; i < pizzas4.length; i++){
+      pizzas4[i].makeRock();
+      pizzas4[i].moveRock();
+    }
+    for(let i = 0; i < pizzas5.length; i++){
+      pizzas5[i].makeRock();
+      pizzas5[i].moveRock();
+    }
     // If on mobile the onscreen controls affect the ship
     if(mobile){
       if(mouseIsPressed && mouseX >= width/24 - width/30 && mouseX <= width/24 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30){
@@ -370,7 +380,7 @@ function draw() {
 
         // Collisions for the large and medium pizzas
         let distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
-        if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/20){
+        if(distance1 <= pizzas[j].r/2 && pizzas[j].r == width/10){
           // Move opposite
           pizzas[j].xVelocity *= -1;
           pizzas[j].yVelocity *= -1;
@@ -386,8 +396,9 @@ function draw() {
         }
 
         // Collisions for small pizzas
-        if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/20){
+        if(distance1 <= pizzas[j].r/2 && pizzas[j].r < width/10){
           // Splice out the pizza and bullet
+          pizzas3.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
           pizzas.splice(j,1);
           bullets.splice(i,1);
           i--;
@@ -405,12 +416,12 @@ function draw() {
         // Collisions for the large and medium pizzas
         let distance1 = dist(pizzas2[j].x, pizzas2[j].y, bullets[i].x, bullets[i].y);
 
-        if(distance1 <= pizzas2[j].r/2 && pizzas2[j].r > width/40){
+        if(distance1 <= pizzas2[j].r/2 && pizzas2[j].r == width/20){
           // Move opposite
           pizzas2[j].xVelocity *= -1;
           pizzas2[j].yVelocity *= -1;
           // Add a new size pizza with half the radius of the current one and half the radius of the existing pizza
-          pizzas3.push(new Rock(pizzas2[j].x - width/40, pizzas2[j].y - width/40, pizzas2[j].r/2));
+          pizzas4.push(new Rock(pizzas2[j].x - width/40, pizzas2[j].y - width/40, pizzas2[j].r/2));
           pizzas2[j].r = pizzas2[j].r/2;
           // Add points if hit
           score++;
@@ -421,8 +432,9 @@ function draw() {
         }
 
         // Collisions for small pizzas
-        if(distance1 <= pizzas2[j].r/2 && pizzas2[j].r <= width/40){
+        if(distance1 <= pizzas2[j].r/2 && pizzas2[j].r <= width/20){
           // Splice out the pizza and bullet
+          // pizzas5.push(new Rock(pizzas2[j].x - width/40, pizzas2[j].y - width/40, pizzas2[j].r/2));
           pizzas2.splice(j,1);
           bullets.splice(i,1);
           i--;
