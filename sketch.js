@@ -7,6 +7,8 @@ let hyper = false;
 
 // Pizza variables
 let pizzas = [];
+let pizzas2 = [];
+let pizzas3 = [];
 let pizza;
 let pizzaorder = 1;
 
@@ -210,10 +212,17 @@ function draw() {
       bullets[i].moveBullet();
     }
     for(let i = 0; i < pizzas.length; i++){
-    pizzas[i].makeRock();
-    pizzas[i].moveRock();
+      pizzas[i].makeRock();
+      pizzas[i].moveRock();
     }
-
+    for(let i = 0; i < pizzas2.length; i++){
+      pizzas2[i].makeRock();
+      pizzas2[i].moveRock();
+    }
+    for(let i = 0; i < pizzas3.length; i++){
+      pizzas3[i].makeRock();
+      pizzas3[i].moveRock();
+    }
     // If on mobile the onscreen controls affect the ship
     if(mobile){
       if(mouseIsPressed && mouseX >= width/24 - width/30 && mouseX <= width/24 + width/30 && mouseY >= height - height/6 - width/30 && mouseY <= height - height/6 + width/30){
@@ -326,6 +335,34 @@ function draw() {
         pizzas[i].y = -width/10;
       }
     }
+    for(i = 0; i < pizzas2.length; i++){
+      if(pizzas2[i].x < -width/10){
+        pizzas2[i].x = width + width/10;
+      }
+      if(pizzas2[i].x > width + width/10){
+        pizzas2[i].x = -width/10;
+      }
+      if(pizzas2[i].y < -width/10){
+        pizzas2[i].y = height + width/10;
+      }
+      if(pizzas2[i].y > height + width/10){
+        pizzas2[i].y = -width/10;
+      }
+    }
+    for(i = 0; i < pizzas3.length; i++){
+      if(pizzas3[i].x < -width/10){
+        pizzas3[i].x = width + width/10;
+      }
+      if(pizzas3[i].x > width + width/10){
+        pizzas3[i].x = -width/10;
+      }
+      if(pizzas3[i].y < -width/10){
+        pizzas3[i].y = height + width/10;
+      }
+      if(pizzas3[i].y > height + width/10){
+        pizzas3[i].y = -width/10;
+      }
+    }
 
     // Collision rule between pizzas/asteroids and bullets/blueberries
     for(j = 0; j < pizzas.length; j++){
@@ -338,7 +375,7 @@ function draw() {
           pizzas[j].xVelocity *= -1;
           pizzas[j].yVelocity *= -1;
           // Add a new size pizza with half the radius of the current one and half the radius of the existing pizza
-          pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
+          pizzas2.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
           pizzas[j].r = pizzas[j].r/2;
           // Add points if hit
           score++;
@@ -362,8 +399,63 @@ function draw() {
       }
     }
 
+    for(j = 0; j < pizzas2.length; j++){
+      for(i = 0; i < bullets.length; i++){
+
+        // Collisions for the large and medium pizzas
+        let distance1 = dist(pizzas2[j].x, pizzas2[j].y, bullets[i].x, bullets[i].y);
+
+        if(distance1 <= pizzas2[j].r/2 && pizzas2[j].r > width/40){
+          // Move opposite
+          pizzas2[j].xVelocity *= -1;
+          pizzas2[j].yVelocity *= -1;
+          // Add a new size pizza with half the radius of the current one and half the radius of the existing pizza
+          pizzas3.push(new Rock(pizzas2[j].x - width/40, pizzas2[j].y - width/40, pizzas2[j].r/2));
+          pizzas2[j].r = pizzas2[j].r/2;
+          // Add points if hit
+          score++;
+          // Splice the bullet out
+          bullets.splice(i,1);
+          i--;
+          hit = true;
+        }
+
+        // Collisions for small pizzas
+        if(distance1 <= pizzas2[j].r/2 && pizzas2[j].r <= width/40){
+          // Splice out the pizza and bullet
+          pizzas2.splice(j,1);
+          bullets.splice(i,1);
+          i--;
+          // Add points if hit
+          score++;
+          // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
+          hit = true;
+        }
+      }
+    }
+
+    for(j = 0; j < pizzas3.length; j++){
+      for(i = 0; i < bullets.length; i++){
+
+        // Collisions for the large and medium pizzas
+        let distance1 = dist(pizzas3[j].x, pizzas3[j].y, bullets[i].x, bullets[i].y);
+
+        // Collisions for small pizzas
+        if(distance1 <= pizzas3[j].r/2 && pizzas3[j].r <= width/40){
+          // Splice out the pizza and bullet
+          pizzas3.splice(j,1);
+          bullets.splice(i,1);
+          i--;
+          // Add points if hit
+          score++;
+          // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
+          hit = true;
+        }
+      }
+    }
+
     // If on the last pizza begin next level
-    if(pizzas.length < 1){
+    if(pizzas.length < 1 && pizzas2.length < 1 && pizzas3.length < 1){
       nextLevel();
     }
 
@@ -377,6 +469,40 @@ function draw() {
       let distance4 = dist(pizzas[j].x, pizzas[j].y, ship.x1 + width/110, ship.y1 + width/70);
       // Collision
       if(distance2 <= pizzas[j].r/4 || distance3 <= pizzas[j].r/4 || distance4 <= pizzas[j].r/4){
+        // Go to end
+        end = true;
+        score = 0;
+        // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
+        crash = true;
+      }
+    }
+
+    for(j = 0; j < pizzas2.length; j++){
+      // Tip of the ship
+      let distance2 = dist(pizzas2[j].x, pizzas2[j].y, ship.x1, ship.y1 - width/70);
+      // Left corner of the ship
+      let distance3 = dist(pizzas2[j].x, pizzas2[j].y, ship.x1 - width/110, ship.y1 + width/70);
+      // Right corner of the ship
+      let distance4 = dist(pizzas2[j].x, pizzas2[j].y, ship.x1 + width/110, ship.y1 + width/70);
+      // Collision
+      if(distance2 <= pizzas2[j].r/4 || distance3 <= pizzas2[j].r/4 || distance4 <= pizzas2[j].r/4){
+        // Go to end
+        end = true;
+        score = 0;
+        // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
+        crash = true;
+      }
+    }
+
+    for(j = 0; j < pizzas3.length; j++){
+      // Tip of the ship
+      let distance2 = dist(pizzas3[j].x, pizzas3[j].y, ship.x1, ship.y1 - width/70);
+      // Left corner of the ship
+      let distance3 = dist(pizzas3[j].x, pizzas3[j].y, ship.x1 - width/110, ship.y1 + width/70);
+      // Right corner of the ship
+      let distance4 = dist(pizzas3[j].x, pizzas3[j].y, ship.x1 + width/110, ship.y1 + width/70);
+      // Collision
+      if(distance2 <= pizzas3[j].r/4 || distance3 <= pizzas3[j].r/4 || distance4 <= pizzas3[j].r/4){
         // Go to end
         end = true;
         score = 0;
@@ -402,33 +528,33 @@ function draw() {
       crash = false;
     }
 
-    if(hit == true && offscreen == true && pizzas.legnth >= 1){
-      // Move opposite
-      pizzas[j].xVelocity *= -1;
-      pizzas[j].yVelocity *= -1;
-      // Add a new size pizza with half the radius of the current one and half the radius of the existing pizza
-      pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
-      pizzas[j].r = pizzas[j].r/2;
-      // Add points if hit
-      score++;
-      // Splice the bullet out
-      bullets.splice(i,1);
-      i--;
-      hit = false;
-      offscreen = false;
-    }
-
-    if(hit == true && offscreen == true && pizzas.length < 1){
-      // Splice out the pizza and bullet
-      pizzas.splice(j,1);
-      bullets.splice(i,1);
-      i--;
-      // Add points if hit
-      score++;
-      // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
-      hit = false;
-      offscreen = false;
-    }
+    // if(hit == true && offscreen == true && pizzas.length >= 1){
+    //   // Move opposite
+    //   pizzas[j].xVelocity *= -1;
+    //   pizzas[j].yVelocity *= -1;
+    //   // Add a new size pizza with half the radius of the current one and half the radius of the existing pizza
+    //   pizzas2.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
+    //   pizzas[j].r = pizzas[j].r/2;
+    //   // Add points if hit
+    //   score++;
+    //   // Splice the bullet out
+    //   bullets.splice(i,1);
+    //   i--;
+    //   hit = false;
+    //   offscreen = false;
+    // }
+    //
+    // if(hit == true && offscreen == true && pizzas.length < 1){
+    //   // Splice out the pizza and bullet
+    //   pizzas.splice(j,1);
+    //   bullets.splice(i,1);
+    //   i--;
+    //   // Add points if hit
+    //   score++;
+    //   // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
+    //   hit = false;
+    //   offscreen = false;
+    // }
 
     // Ship has a maximum velocity
     if(ship.xVelocity >= width/300){
@@ -641,7 +767,7 @@ function start(){
   ship = new Spacecraft();
   // Creates pizzas/asteroids at random places offscreen
   for(let i = 0; i < pizzaorder; i++){
-    pizzas[i] = new Rock(random(0, width), random(0, height), width/5);
+    pizzas[i] = new Rock(random(0, width), random(0, height), width/10);
   }
   // Reset variables
   click3 = true;
@@ -719,6 +845,6 @@ function nextLevel(){
   }
   level++;
   for(let i = 0; i < pizzaorder; i++){
-    pizzas[i] = new Rock(random(0, width), random(-height, 0), width/5);
+    pizzas[i] = new Rock(random(0, width), random(-height, 0), width/10);
   }
 }
