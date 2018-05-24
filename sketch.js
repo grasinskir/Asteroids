@@ -351,10 +351,26 @@ function draw() {
     // Collision rule between pizzas/asteroids and bullets/blueberries
     for(j = 0; j < pizzas.length; j++){
       for(i = 0; i < bullets.length; i++){
-
+        console.log("p.l = " + pizzas.length + "j = " + j);
         // Collisions for the large and medium pizzas
         let distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
-        if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
+        if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
+          piecutter.push(new Spiky(pizzas[j].x, pizzas[j].y));
+
+          i--;
+          // Add points if hit
+          score++;
+          // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
+          hit = true;
+          // Splice out the pizza and bullet
+          pizzas.splice(j,1);
+
+          bullets.splice(i,1);
+
+        }if(pizzas.length == 0){
+          i = bullets.length + 1;
+        }
+        else if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
           // Move opposite
           pizzas[j].xVelocity *= -1;
           pizzas[j].yVelocity *= -1;
@@ -367,24 +383,39 @@ function draw() {
           bullets.splice(i,1);
           i--;
           hit = true;
+          // Collisions for small pizzas
+          // if(pizzas[j].r <= width/40){
+          //   piecutter.push(new Spiky(pizzas[j].x, pizzas[j].y));
+          //
+          //   i--;
+          //   // Add points if hit
+          //   score++;
+          //   // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
+          //   hit = true;
+          //   // Splice out the pizza and bullet
+          //   pizzas.splice(j,1);
+          //   bullets.splice(i,1);
+          //
+          //
+          // }
+
         }
 
-        // Collisions for small pizzas
-        if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
-          piecutter.push(new Spiky(pizzas[j].x, pizzas[j].y));
-          // Splice out the pizza and bullet
-          pizzas.splice(j,1);
-          j--;
-          bullets.splice(i,1);
-          i--;
-          // Add points if hit
-          score++;
-          // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
-          hit = true;
-
-
-
-        }
+        // // Collisions for small pizzas
+        // if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
+        //   piecutter.push(new Spiky(pizzas[j].x, pizzas[j].y));
+        //
+        //   i--;
+        //   // Add points if hit
+        //   score++;
+        //   // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
+        //   hit = true;
+        //   // Splice out the pizza and bullet
+        //   pizzas.splice(j,1);
+        //   bullets.splice(i,1);
+        //
+        //
+        // }
       }
     }
 
@@ -446,12 +477,12 @@ function draw() {
     }
 
     // Make sure game doesn't break when both the ship and bullet hit a pizza at the same time
-    if(hit == true && crash == true){
-      end = true;
-      score = 0;
-      hit = false;
-      crash = false;
-    }
+    // if(hit == true && crash == true){
+    //   end = true;
+    //   score = 0;
+    //   hit = false;
+    //   crash = false;
+    // }
 
     // Ship has a maximum velocity
     if(ship.xVelocity >= width/300){
