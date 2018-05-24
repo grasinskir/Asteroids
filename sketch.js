@@ -184,7 +184,7 @@ class Spiky{
     this.x = posX;
     this.y = posY;
     this.width = width/90;
-    this.height = height/60;
+    this.height = width/90;
   }
 
   makeSpiky(){
@@ -227,12 +227,12 @@ function draw() {
       bullets[i].makeBullet();
       bullets[i].moveBullet();
     }
+    for(let i = 0; i < piecutter.length; i++){
+      piecutter[i].makeSpiky();
+    }
     for(let i = 0; i < pizzas.length; i++){
       pizzas[i].makeRock();
       pizzas[i].moveRock();
-    }
-    for(let i = 0; i < piecutter.length; i++){
-      piecutter[i].makeSpiky();
     }
 
     // If on mobile the onscreen controls affect the ship
@@ -425,7 +425,9 @@ function draw() {
       let distance33 = dist(piecutter[j].x - piecutter[j].width, piecutter[j].y + piecutter[j].height, ship.x1 + width/110, ship.y1 + width/70);
       let distance43 = dist(piecutter[j].x + piecutter[j].width, piecutter[j].y + piecutter[j].height, ship.x1 + width/110, ship.y1 + width/70);
       // Collision
-      if(distance21 <= piecutter[j].width || distance31 <= piecutter[j].width || distance41 <= piecutter[j].width || distance22 <= piecutter[j].width || distance32 <= piecutter[j].width || distance42 <= piecutter[j].width || distance23 <= piecutter[j].width || distance33 <= piecutter[j].width || distance43 <= piecutter[j].width){
+      if(distance21 <= piecutter[j].width || distance31 <= piecutter[j].width || distance41 <= piecutter[j].width ||
+        distance22 <= piecutter[j].width || distance32 <= piecutter[j].width || distance42 <= piecutter[j].width ||
+        distance23 <= piecutter[j].width || distance33 <= piecutter[j].width || distance43 <= piecutter[j].width){
         // Go to end
         end = true;
         score = 0;
@@ -480,7 +482,7 @@ function draw() {
       mobile = false;
       hit = false;
       crash = false;
-      level = 0;
+      level = 1;
       bullets = [];
       pizzas = [];
       piecutter = [];
