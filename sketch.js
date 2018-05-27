@@ -423,6 +423,9 @@ function draw() {
         if(pizzas.length < 1){
           break;
         }
+        if(bullets.length < 1){
+          break;
+        }
         // if(pizzas[j].x === undefined){
         //   break;
         // }
