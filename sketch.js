@@ -786,7 +786,7 @@ function bulletCount(){
   let xPos = width - width/25;
   let yPos = height - height/25;
   for(let i = 0; i < reload; i++){
-    fill('rgba(0, 0, 255, 0.5)');
+    fill('rgba(255, 0, 0, 0.5)');
     noStroke();
     ellipse(xPos, yPos, width/100, width/100);
     xPos -= width/50;
