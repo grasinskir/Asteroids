@@ -419,6 +419,7 @@ function draw() {
           //   j = pizzas.length;
           //   console.log(pizzas.length);
           // }
+          break;
         }
         if(pizzas.length < 1){
           break;
