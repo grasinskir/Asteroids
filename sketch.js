@@ -376,38 +376,38 @@ function draw() {
     for(j = 0; j < pizzas.length; j++){
       for(i = 0; i < bullets.length; i++){
         let distance1 = dist(pizzas[j].x, pizzas[j].y, bullets[i].x, bullets[i].y);
-         if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
-          // Move opposite
-          pizzas[j].xVelocity *= -1;
-          pizzas[j].yVelocity *= -1;
-          // Add a new size pizza with half the radius of the current one and half the radius of the existing pizza
-          // pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
-          pizzas[j].r = pizzas[j].r/2;
-          // Add points if hit
-          score++;
-          // Splice the bullet out
-          bullets.splice(i,1);
-          i--;
-          hit = true;
-          // Collisions for small pizzas
-          // if(pizzas[j].r <= width/40){
-          //   piecutter.push(new Spiky(pizzas[j].x, pizzas[j].y));
-          //
-          //   i--;
-          //   // Add points if hit
-          //   score++;
-          //   // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
-          //   hit = true;
-          //   // Splice out the pizza and bullet
-          //   pizzas.splice(j,1);
-          //   bullets.splice(i,1);
-          //
-          //
-          // }
-
-
-        }
-        if(distance1 <= pizzas[j].r/2 && pizzas[j].r <= width/40){
+        //  if(distance1 <= pizzas[j].r/2 && pizzas[j].r > width/40){
+        //   // Move opposite
+        //   pizzas[j].xVelocity *= -1;
+        //   pizzas[j].yVelocity *= -1;
+        //   // Add a new size pizza with half the radius of the current one and half the radius of the existing pizza
+        //   // pizzas.push(new Rock(pizzas[j].x - width/40, pizzas[j].y - width/40, pizzas[j].r/2));
+        //   pizzas[j].r = pizzas[j].r/2;
+        //   // Add points if hit
+        //   score++;
+        //   // Splice the bullet out
+        //   bullets.splice(i,1);
+        //   i--;
+        //   hit = true;
+        //   // Collisions for small pizzas
+        //   // if(pizzas[j].r <= width/40){
+        //   //   piecutter.push(new Spiky(pizzas[j].x, pizzas[j].y));
+        //   //
+        //   //   i--;
+        //   //   // Add points if hit
+        //   //   score++;
+        //   //   // Makes sure game doesn't break when both the ship and bullet hit a pizza at the same time
+        //   //   hit = true;
+        //   //   // Splice out the pizza and bullet
+        //   //   pizzas.splice(j,1);
+        //   //   bullets.splice(i,1);
+        //   //
+        //   //
+        //   // }
+        //
+        //
+        // }
+        if(distance1 <= pizzas[j].r/2 /*&& pizzas[j].r <= width/40*/){
           piecutter.push(new Spiky(pizzas[j].x, pizzas[j].y));
 
 
@@ -738,12 +738,14 @@ function start(){
   ship = new Spacecraft();
   // Creates pizzas/asteroids at random places offscreen
   for(let i = 0; i < pizzaorder; i++){
-    pizzas[i] = new Rock(random(0, width), random(0, height), width/10);
+    pizzas[i] = new Rock(random(0, width), random(0, height), random(width/40, width/10));
   }
   // Reset variables
   click3 = true;
   reload = 10;
   piecutter = [];
+  pizzaorder = 1;
+  level = 1;
 }
 
 
@@ -817,6 +819,6 @@ function nextLevel(){
   }
   level++;
   for(let i = 0; i < pizzaorder; i++){
-    pizzas[i] = new Rock(random(0, width), random(-height, 0), width/10);
+    pizzas[i] = new Rock(random(0, width), random(-height, 0), random(width/40, width/10));
   }
 }
